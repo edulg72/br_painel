@@ -1,0 +1,207 @@
+* {font-family: Verdana, sans-serif;}
+
+h1 {
+	font-size: 1.1em;
+	margin: 2;
+}
+
+h2 {
+	font-size: 1em;
+	color: #66F;
+	border: 1px solid;
+	text-align: center;
+	margin: 15 1 5 1;
+	padding: 3;
+}
+
+h3 {
+	font-size: 0.9em;
+        color: #666;
+	margin: 2 2 5;
+}
+
+h4 {
+	font-size: 0.9em;
+	font-weight: bold;
+	margin: 2;
+}
+
+body {
+}
+
+.container {
+	width: 1000px;
+	margin: 0 auto;
+	padding: 0;
+	background-color: #FFE;
+}
+
+.header h1 {
+	font-size: 1.1em;
+	text-align: center;
+}
+
+.mapa {
+	float: left;
+	border: 2px solid #99F;
+	border-radius: 8px;
+        padding: 5px;
+	margin: 1px 5px;
+	background-color: #DDF;
+	width: 580px;
+}
+
+.resumo {
+	float:left;
+	width: 260px;
+	padding: 0;
+	margin: 0;
+}
+
+.info {
+	clear: left;
+	float: left;
+	width: 250px;
+	background-color: #EEE;
+	border-radius: 8px;
+	border: 2px solid #999;
+	margin: 5px;
+}
+
+.info_header {
+	background-color: #CCC;
+	color: #000;
+	margin: 0;
+	padding: 2px;
+}
+
+.info_header img {
+	vertical-align: middle;
+}
+
+.info_header span {
+	text-align: left;
+	font-weight: bold;
+	font-size: 1em;
+}
+
+.numero {
+	text-align: right;
+	color: #006;
+}
+
+.total {
+	font-weight: bold;
+	text-align: right;
+	border-top: 1px solid #333;
+}
+
+.links {
+	position: absolute;
+	top: 4px;
+	right: 4px;
+	font-size: 0.8em;
+}
+
+.estado {
+	margin: 2 0;
+}
+
+.regioes {
+	display: block;
+	align-items: center;
+	padding: 3px;
+}
+
+.regiao {
+	display: inline;
+	margin: 2px;
+	padding: 3px;
+        border-radius: 5px;
+	background-color: #EEE;
+}
+
+.regiao a {
+	font-size: 0.8em;
+	margin: 2;
+        padding: 2;
+	color: #333;
+}
+
+
+.grupo {
+	color: #66F;
+	border: 1px solid;
+	text-align: center;
+	margin: 15 1 5 1;
+	padding: 3;
+}
+
+.titulo {
+	font-weight: bold;
+	font-size: 1em;
+}
+
+.atu {
+	font-size: 0.6em;
+	position: absolute;
+	right: 15px;
+	margin: 3px;
+	color: #000;
+}
+
+.pus {
+	display: none;
+}
+
+.mps {
+	display: none;
+}
+
+.ur {
+	float: left;
+	margin: 5 ;
+	padding: 4;
+	border-radius: 8px;
+}
+
+.pu {
+	float: left;
+	margin: 5;
+	padding: 4;
+	border-radius: 8px;
+	font-size: 0.7em;
+}
+
+a {
+	text-decoration: none;
+}
+
+.comentarios {
+	font-size: 0.6em;
+	margin: 1 2;
+}
+
+.verde {
+	background-color: #CFC;
+        border: 1px solid #6F6;
+}
+
+.amarelo {
+	background-color: #FFC;
+	border: 1px solid #DD6;
+}
+
+.vermelho {
+	background-color: #F88;
+	border: 1px solid #C33;
+}
+
+.encerradas {
+	font-size: 0.8em;
+	background-color: #EEE;
+}
+
+.alerta {
+	background-color: #FFC;
+}

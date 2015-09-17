@@ -1,0 +1,84 @@
+%html
+ %head
+  %meta{:charset => 'utf-8'}
+  %title= "URs - #{@mu.microrregiao.regiao.estado.nm_estado}"
+  %link{:href => '/waze.css', :rel => 'stylesheet'}
+  %script{:src => "https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"}
+  %script $(document).ready(function(){$(".pu_header").click(function(){$(".pus").toggle();});});
+  %script $(document).ready(function(){$(".mp_header").click(function(){$(".mps").toggle();});});
+ %body
+  %div.links
+   %a{:href => "/microrregiao/#{@mu.microrregiaoid}"}= "Microrregi&atilde;o"
+   |
+   %a{:href => "/regiao/#{@mu.microrregiao.regiaoid}"}= "Regi&atilde;o"
+   |
+   %a{:href => "/#{@mu.microrregiao.regiao.estado.sigla}"}= "Estado"
+   |
+   %a{:href => "/"}= "P\&aacute;gina inicial"
+  %h1{:align => 'center'}= @mu.microrregiao.regiao.estado.nm_estado
+  %h3{:align => 'center'}= "#{@mu.microrregiao.regiao.nm_meso} / #{@mu.microrregiao.nm_micro} / #{@mu.nm_municip}"
+  %h4{:align => 'center'}= "#{@mu.urs.abertas.count} URs abertas | #{@mu.urs.encerradas.count} URs encerradas"
+  %p.comentarios{:align => "right"}= "Dados atualizados em #{@atu_ur.data.strftime('%d/%m/%Y %H:%M')}"
+  - if @mu.pus.editaveis.count > 0
+   %div.grupo
+    %span.titulo.pu_header= "#{@mu.pus.editaveis.count} PUs"
+    %span.atu= "Atualizado em #{@atu_pu.data.strftime('%d/%m/%Y %H:%M')}"
+   %div.pus
+    - @mu.pus.editaveis.order("data_criacao").each do |p|
+     %div{:class => "pu #{(Time.now - p.data_criacao) < 172800 ? 'verde' : ((Time.now - p.data_criacao) < 1209600 ? 'amarelo' : 'vermelho')}"}
+      %a{:href => "https://www.waze.com/pt-BR/editor/?zoom=5\&lat=#{p.latitude}\&lon=#{p.longitude}\&showpur=#{p.id}\&endshow", :target => "WME"}= (p.nome_local.nil? or p.nome_local.strip.empty? ? '[Sem nome]': p.nome_local)
+    %div{:style => 'clear: both;'}
+  - if @mu.mps.abertas.count > 0
+   %div.grupo
+    %span.titulo.mp_header= "#{mr.mps.abertas.count} MPs"
+    %span.atu= "Atualizado em #{@atu_ur.data.strftime('%d/%m/%Y %H:%M')}"
+   %div.mps
+    - @mu.mps.abertas.order("peso desc").each do |m|
+     %div{:class => "ur #{m.peso < 4 ? 'verde' : (m.peso < 8 ? 'amarelo' : 'vermelho')}"}
+      %a{:href => "https://www.waze.com/pt-BR/editor/?zoom=5\&lat=#{m.latitude}\&lon=#{m.longitude}\&mapProblem=#{m.id}", :target => "WME"}= m.id
+    %div{:style => 'clear: both;'}
+  - if @mu.urs.abertas.sem_comentarios.count > 0
+   %div.grupo
+    %span.titulo URs sem coment&aacute;rios
+    %span.atu= "Atualizado em #{@atu_ur.data.strftime('%d/%m/%Y %H:%M')}"
+   - @mu.urs.abertas.sem_comentarios.order(:data_abertura).each do |u|
+    %div{:class => "ur #{(Time.now - u.data_abertura) < 172800 ? 'verde' : ((Time.now - u.data_abertura) < 1209600 ? 'amarelo' : 'vermelho')}"}
+     %a{:href => "https://www.waze.com/pt-BR/editor/?zoom=5\&lat=#{u.latitude}\&lon=#{u.longitude}\&mapUpdateRequest=#{u.id}", :target => "WME"}= u.id
+   %div{:style => 'clear: both;'}
+  - if @mu.urs.abertas.com_resposta.count > 0
+   %div.grupo
+    %span.titulo URs com resposta
+    %span.atu= "Atualizado em #{@atu_ur.data.strftime('%d/%m/%Y %H:%M')}"
+   - @mu.urs.abertas.com_resposta.order(:data_ultimo_comentario).each do |u|
+    %div{:class => "ur #{(Time.now - u.data_ultimo_comentario) < 172800 ? 'verde' : ((Time.now - u.data_ultimo_comentario) < 1209600 ? 'amarelo' : 'vermelho')}"}
+     %a{:href => "https://www.waze.com/pt-BR/editor/?zoom=5\&lat=#{u.latitude}\&lon=#{u.longitude}\&mapUpdateRequest=#{u.id}", :target => "WME"}= u.id
+     %p.comentarios= "#{u.comentarios} coment\&aacute;rio#{u.comentarios > 1 ? 's' : ''}"
+   %div{:style => 'clear: both;'}
+  - if @mu.urs.abertas.sem_resposta.count > 0
+   %div.grupo
+    %span.titulo URs aguardando resposta
+    %span.atu= "Atualizado em #{@atu_ur.data.strftime('%d/%m/%Y %H:%M')}"
+   - @mu.urs.abertas.sem_resposta.order(:data_ultimo_comentario).each do |u|
+    %div{:class => "ur #{(Time.now - u.data_ultimo_comentario) < 172800 ? 'verde' : ((Time.now - u.data_ultimo_comentario) < 1209600 ? 'amarelo' : 'vermelho')}"}
+     %a{:href => "https://www.waze.com/pt-BR/editor/?zoom=5\&lat=#{u.latitude}\&lon=#{u.longitude}\&mapUpdateRequest=#{u.id}", :target => "WME"}= u.id
+     %p.comentarios= "#{u.comentarios} coment\&aacute;rio#{u.comentarios > 1 ? 's' : ''}"
+   %div{:style => 'clear: both;'}
+  %h2 URs encerradas recentemente
+  %table{:border => '0', :cellspacing => '1', :cellpadding => '2', :width => '100%'}
+   %tr.encerradas
+    %th Data
+    %th Editor
+    %th Solu&ccedil;&atilde;o
+    %th &Uacute;ltimo coment&aacute;rio
+   - @mu.urs.encerradas.order("resolvida_em desc").each do |u|
+    %tr.encerradas
+     %td{:align => 'center'}= u.resolvida_em.strftime('%d/%m/%Y %H:%M')
+     %td
+      - if not u.operador.nil?
+       %a{:href => "https://www.waze.com/pt-BR/editor/?zoom=5\&lat=#{u.latitude}\&lon=#{u.longitude}\&mapUpdateRequest=#{u.id}", :target => "WME"}
+        = "#{u.operador.username} (#{u.operador.rank})"
+     %td{:align => 'center'}= (u.resolucao == 0 ? 'Resolvido' : 'N&atilde;o identificado')
+     %td
+      - if u.comentarios > 0
+       %strong= "#{u.comentarista.username} (#{u.comentarista.rank})"
+       = u.ultimo_comentario 

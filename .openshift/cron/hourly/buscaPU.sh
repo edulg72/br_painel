@@ -43,5 +43,5 @@ ruby busca_PU.rb $USER $PASS -54.5 -32 -51.5 -33 1 >> ${OPENSHIFT_LOG_DIR}/busca
 ruby busca_PU.rb $USER $PASS -54 -33 -52 -34 1 >> ${OPENSHIFT_LOG_DIR}/buscaPU.log
 
 psql -d painel -c 'update pu set municipioid = (select cd_geocmu from municipios where ST_Contains(geom, pu.posicao)) where municipioid is null;' >> ${OPENSHIFT_LOG_DIR}/buscaPU.log
-psql -d painel -c 'select vw_pu_refresh_table;' >> ${OPENSHIFT_LOG_DIR}/buscaPU.log
+psql -d painel -c 'select vw_pu_refresh_table();' >> ${OPENSHIFT_LOG_DIR}/buscaPU.log
 psql -d painel -c "update atualizacao set data = current_timestamp where objeto = 'pu';" >> ${OPENSHIFT_LOG_DIR}/buscaPU.log

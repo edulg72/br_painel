@@ -1,141 +1,140 @@
-/ Mapa do Brasil mapeado em CSS ( https://github.com/insign/mapa_Brasil_CSS )
-/ - Arquivos fontes em alta resolucao e mapa em SVG via https://commons.wikimedia.org/wiki/File:Brazil_Blank_Map_light.svg
-/ - Arquivos finais em 16 cores e extremamente leve
-/ - Sprite em 16 cores e criado via http://css.spritegen.com
-/ - Ao mudar o tamanho, infelizmente as regras de "margin" das tags ul e li deverao ser reescritas manualmente
-/ Changelog:
-/ 	* 23/07/2012 - Arquivos em alta resolucao e sprite por Helio Oliveira <insign@gmail.com>
-/     * Criado por @rafaelpvale http://www.upalele.com
-/     * Tecnica desenvolvida por Roman Cortes
-/     http://www.romancortes.com/blog/xhtmlcss-mapmapa/
-%div.container
- %div.header
-  %h1 Waze Brasil - Painel de Controle
- %div.mapa
-  %ul#map
-   %li#crs{ :estado => "rs"}
-    %a#rs{ :href => "/RS", :title => "RS"}
-     %img{ :src => "#{asset_path 'null.gif'}", :alt => "Rio Grande do Sul"}
-   %li#csc{ :estado => "sc"}
-    %a#sc{ :href => "/SC", :title => "SC"}
-     %img{ :src => "#{asset_path 'null.gif'}", :alt => "Santa Catarina" }
-   %li#cpr{ :estado => "pr"}
-    %a#pr{ :href => "/PR", :title => "PR"}
-     %img{ :src => "#{asset_path 'null.gif'}", :alt => "Parana" }
-   %li#csp{ :estado => "sp"}
-    %a#sp{ :href => "/SP", :title => "SP"}
-     %img{ :src => "#{asset_path 'null.gif'}", :alt => "Sao Paulo" }
-   %li#cms{ :estado => "ms"}
-    %a#ms{ :href => "/MS", :title => "MS"}
-     %img{ :src => "#{asset_path 'null.gif'}", :alt => "Mato Grosso do Sul" }
-   %li#crj{ :estado => "rj"}
-    %a#rj{ :href => "/RJ", :title => "RJ"}
-     %img{ :src => "#{asset_path 'null.gif'}", :alt => "Rio de Janeiro" }
-   %li#ces{ :estado => "es"}
-    %a#es{ :href => "/ES", :title => "ES"}
-     %img{ :src => "#{asset_path 'null.gif'}", :alt => "Espirito Santo" }
-   %li#cmg{ :estado => "mg"}
-    %a#mg{ :href => "/MG", :title => "MG"}
-     %img{ :src => "#{asset_path 'null.gif'}", :alt => "Minas Gerais" }
-   %li#cgo{ :estado => "go"}
-    %a#go{ :href => "/GO", :title => "GO"}
-     %img{ :src => "#{asset_path 'null.gif'}", :alt => "Goiás" }
-   %li#cdf{ :estado => "df"}
-    %a#df{ :href => "/DF", :title => "DF"}
-     %img{ :src => "#{asset_path 'null.gif'}", :alt => "Distrito Federal" }
-   %li#cba{ :estado => "ba"}
-    %a#ba{ :href => "/BA", :title => "BA"}
-     %img{ :src => "#{asset_path 'null.gif'}", :alt => "Bahia" }
-   %li#cmt{ :estado => "mt"}
-    %a#mt{ :href => "/MT", :title => "MT"}
-     %img{ :src => "#{asset_path 'null.gif'}", :alt => "Mato Grosso" }
-   %li#cro{ :estado => "ro"}
-    %a#ro{ :href => "/RO", :title => "RO"}
-     %img{ :src => "#{asset_path 'null.gif'}", :alt => "Rondônia" }
-   %li#cac{ :estado => "ac"}
-    %a#ac{ :href => "/AC", :title => "AC"}
-     %img{ :src => "#{asset_path 'null.gif'}", :alt => "Acre" }
-   %li#cam{ :estado => "am"}
-    %a#am{ :href => "/AM", :title => "AM"}
-     %img{ :src => "#{asset_path 'null.gif'}", :alt => "Amazonas" }
-   %li#crr{ :estado => "rr"}
-    %a#rr{ :href => "/RR", :title => "RR"}
-     %img{ :src => "#{asset_path 'null.gif'}", :alt => "Roraima" }
-   %li#cpa{ :estado => "pa"}
-    %a#pa{ :href => "/PA", :title => "PA"}
-     %img{ :src => "#{asset_path 'null.gif'}", :alt => "Pará" }
-   %li#cap{ :estado => "ap"}
-    %a#ap{ :href => "/AP", :title => "AP"}
-     %img{ :src => "#{asset_path 'null.gif'}", :alt => "Amapá" }
-   %li#cma{ :estado => "ma"}
-    %a#ma{ :href => "/MA", :title => "MA"}
-     %img{ :src => "#{asset_path 'null.gif'}", :alt => "Maranhão" }
-   %li#cto{ :estado => "to"}
-    %a#to{ :href => "/TO", :title => "TO"}
-     %img{ :src => "#{asset_path 'null.gif'}", :alt => "Tocantins" }
-   %li#cse{ :estado => "se"}
-    %a#se{ :href => "/SE", :title => "SE"}
-     %img{ :src => "#{asset_path 'null.gif'}", :alt => "Sergipe" }
-   %li#cal{ :estado => "al"}
-    %a#al{ :href => "/AL", :title => "AL"}
-     %img{ :src => "#{asset_path 'null.gif'}", :alt => "Alagoas" }
-   %li#cpe{ :estado => "pe"}
-    %a#pe{ :href => "/PE", :title => "PE"}
-     %img{ :src => "#{asset_path 'null.gif'}", :alt => "Pernambuco" }
-   %li#cpb{ :estado => "pb"}
-    %a#pb{ :href => "/PB", :title => "PB"}
-     %img{ :src => "#{asset_path 'null.gif'}", :alt => "Paraíba" }
-   %li#crn{ :estado => "rn"}
-    %a#rn{ :href => "/RN", :title => "RN"}
-     %img{ :src => "#{asset_path 'null.gif'}", :alt => "Rio Grande do Norte" }
-   %li#cce{ :estado => "ce"}
-    %a#ce{ :href => "/CE", :title => "CE"}
-     %img{ :src => "#{asset_path 'null.gif'}", :alt => "Ceará" }
-   %li#cpi{ :estado => "pi"}
-    %a#pi{ :href => "/PI", :title => "PI"}
-     %img{ :src => "#{asset_path 'null.gif'}", :alt => "Piauí" }
- %div.resumo
-  %div.info
-   %div.info_header
-    %img{ :src => "#{asset_path 'ur.png'}" }
-    %span User Requests (UR)
-   %table{ :width => "100%" }
-    %tr
-     %td Sem coment&aacute;rios
-     %td.numero= @ur.abertas.sem_comentarios.count
-    %tr
-     %td Com resposta
-     %td.numero= @ur.abertas.com_resposta.count
-    %tr
-     %td Aguardando resposta
-     %td.numero= @ur.abertas.sem_resposta.count
-    %tr.total
-     %td Total
-     %td.numero= @ur.abertas.count
-  %div{ :clear => "both" }
-  %div.info
-   %div.info_header
-    %img{ :src => "#{asset_path 'mp.png'}" }
-    %span Map Problems (MP)
-   %table{ :width => "100%" }
-    %tr.total
-     %td Total
-     %td.numero= @mp.count
-  %div{ :clear => "both" }
-  %div.info
-   %div.info_header
-    %img{ :src => "#{asset_path 'pu.png'}" }
-    %span Place Updates (PU)
-   %table{ :width => "100%" }
-    %tr
-     %td Pendentes
-     %td.numero= @pu.editaveis.count
-    %tr
-     %td Bloqueados (staff)
-     %td.numero= @pu.bloqueados.count
-    %tr.total
-     %td Total
-     %td.numero= @pu.count
-  %div{ :clear => "both" }
- %div{ :clear => "both" }
-%div{ :clear => "both" }
+- cache [@atu_ur, @atu_pu] do
+ / Mapa do Brasil mapeado em CSS ( https://github.com/insign/mapa_Brasil_CSS )
+ / - Arquivos fontes em alta resolucao e mapa em SVG via https://commons.wikimedia.org/wiki/File:Brazil_Blank_Map_light.svg
+ / - Arquivos finais em 16 cores e extremamente leve
+ / - Sprite em 16 cores e criado via http://css.spritegen.com
+ / - Ao mudar o tamanho, infelizmente as regras de "margin" das tags ul e li deverao ser reescritas manualmente
+ / Changelog:
+ / 	* 23/07/2012 - Arquivos em alta resolucao e sprite por Helio Oliveira <insign@gmail.com>
+ /     * Criado por @rafaelpvale http://www.upalele.com
+ /     * Tecnica desenvolvida por Roman Cortes
+ /     http://www.romancortes.com/blog/xhtmlcss-mapmapa/   
+ %div.container
+  %div.header
+   %h1 Waze Brasil - Painel de Controle
+  %div.mapa
+   %ul#map
+    %li#crs{ :estado => "rs"}
+     %a#rs{ :href => "/RS", :title => "RS"}
+      %img{ :src => "#{asset_path 'null.gif'}", :alt => "Rio Grande do Sul"}
+    %li#csc{ :estado => "sc"}
+     %a#sc{ :href => "/SC", :title => "SC"}
+      %img{ :src => "#{asset_path 'null.gif'}", :alt => "Santa Catarina" }
+    %li#cpr{ :estado => "pr"}
+     %a#pr{ :href => "/PR", :title => "PR"}
+      %img{ :src => "#{asset_path 'null.gif'}", :alt => "Parana" }
+    %li#csp{ :estado => "sp"}
+     %a#sp{ :href => "/SP", :title => "SP"}
+      %img{ :src => "#{asset_path 'null.gif'}", :alt => "Sao Paulo" }
+    %li#cms{ :estado => "ms"}
+     %a#ms{ :href => "/MS", :title => "MS"}
+      %img{ :src => "#{asset_path 'null.gif'}", :alt => "Mato Grosso do Sul" }
+    %li#crj{ :estado => "rj"}
+     %a#rj{ :href => "/RJ", :title => "RJ"}
+      %img{ :src => "#{asset_path 'null.gif'}", :alt => "Rio de Janeiro" }
+    %li#ces{ :estado => "es"}
+     %a#es{ :href => "/ES", :title => "ES"}
+      %img{ :src => "#{asset_path 'null.gif'}", :alt => "Espirito Santo" }
+    %li#cmg{ :estado => "mg"}
+     %a#mg{ :href => "/MG", :title => "MG"}
+      %img{ :src => "#{asset_path 'null.gif'}", :alt => "Minas Gerais" }
+    %li#cgo{ :estado => "go"}
+     %a#go{ :href => "/GO", :title => "GO"}
+      %img{ :src => "#{asset_path 'null.gif'}", :alt => "Goiás" }
+    %li#cdf{ :estado => "df"}
+     %a#df{ :href => "/DF", :title => "DF"}
+      %img{ :src => "#{asset_path 'null.gif'}", :alt => "Distrito Federal" }
+    %li#cba{ :estado => "ba"}
+     %a#ba{ :href => "/BA", :title => "BA"}
+      %img{ :src => "#{asset_path 'null.gif'}", :alt => "Bahia" }
+    %li#cmt{ :estado => "mt"}
+     %a#mt{ :href => "/MT", :title => "MT"}
+      %img{ :src => "#{asset_path 'null.gif'}", :alt => "Mato Grosso" }
+    %li#cro{ :estado => "ro"}
+     %a#ro{ :href => "/RO", :title => "RO"}
+      %img{ :src => "#{asset_path 'null.gif'}", :alt => "Rondônia" }
+    %li#cac{ :estado => "ac"}
+     %a#ac{ :href => "/AC", :title => "AC"}
+      %img{ :src => "#{asset_path 'null.gif'}", :alt => "Acre" }
+    %li#cam{ :estado => "am"}
+     %a#am{ :href => "/AM", :title => "AM"}
+      %img{ :src => "#{asset_path 'null.gif'}", :alt => "Amazonas" }
+    %li#crr{ :estado => "rr"}
+     %a#rr{ :href => "/RR", :title => "RR"}
+      %img{ :src => "#{asset_path 'null.gif'}", :alt => "Roraima" }
+    %li#cpa{ :estado => "pa"}
+     %a#pa{ :href => "/PA", :title => "PA"}
+      %img{ :src => "#{asset_path 'null.gif'}", :alt => "Pará" }
+    %li#cap{ :estado => "ap"}
+     %a#ap{ :href => "/AP", :title => "AP"}
+      %img{ :src => "#{asset_path 'null.gif'}", :alt => "Amapá" }
+    %li#cma{ :estado => "ma"}
+     %a#ma{ :href => "/MA", :title => "MA"}
+      %img{ :src => "#{asset_path 'null.gif'}", :alt => "Maranhão" }
+    %li#cto{ :estado => "to"}
+     %a#to{ :href => "/TO", :title => "TO"}
+      %img{ :src => "#{asset_path 'null.gif'}", :alt => "Tocantins" }
+    %li#cse{ :estado => "se"}
+     %a#se{ :href => "/SE", :title => "SE"}
+      %img{ :src => "#{asset_path 'null.gif'}", :alt => "Sergipe" }
+    %li#cal{ :estado => "al"}
+     %a#al{ :href => "/AL", :title => "AL"}
+      %img{ :src => "#{asset_path 'null.gif'}", :alt => "Alagoas" }
+    %li#cpe{ :estado => "pe"}
+     %a#pe{ :href => "/PE", :title => "PE"}
+      %img{ :src => "#{asset_path 'null.gif'}", :alt => "Pernambuco" }
+    %li#cpb{ :estado => "pb"}
+     %a#pb{ :href => "/PB", :title => "PB"}
+      %img{ :src => "#{asset_path 'null.gif'}", :alt => "Paraíba" }
+    %li#crn{ :estado => "rn"}
+     %a#rn{ :href => "/RN", :title => "RN"}
+      %img{ :src => "#{asset_path 'null.gif'}", :alt => "Rio Grande do Norte" }
+    %li#cce{ :estado => "ce"}
+     %a#ce{ :href => "/CE", :title => "CE"}
+      %img{ :src => "#{asset_path 'null.gif'}", :alt => "Ceará" }
+    %li#cpi{ :estado => "pi"}
+     %a#pi{ :href => "/PI", :title => "PI"}
+      %img{ :src => "#{asset_path 'null.gif'}", :alt => "Piauí" }
+  %div.resumo
+   %div.info
+    %div.info_header
+     %img{ :src => "#{asset_path 'ur.png'}" }
+     %span User Requests (UR)
+    %table{ :width => "100%" }
+     %tr
+      %td Sem coment&aacute;rios
+      %td.numero= @ur.abertas.sem_comentarios.count
+     %tr
+      %td Com resposta
+      %td.numero= @ur.abertas.com_resposta.count
+     %tr
+      %td Aguardando resposta
+      %td.numero= @ur.abertas.sem_resposta.count
+     %tr.total
+      %td Total
+      %td.numero= @ur.abertas.count
+   %div{ :clear => "both" }
+   %div.info
+    %div.info_header
+     %img{ :src => "#{asset_path 'mp.png'}" }
+     %span Map Problems (MP)
+    %table{ :width => "100%" }
+     %tr.total
+      %td Total
+      %td.numero= @mp.count
+   %div{ :clear => "both" }
+   %div.info
+    %div.info_header
+     %img{ :src => "#{asset_path 'pu.png'}" }
+     %span Place Updates (PU)
+    %table{ :width => "100%" }
+     %tr
+      %td Pendentes
+      %td.numero= @pu.editaveis.count
+     %tr
+      %td Bloqueados (staff)
+      %td.numero= @pu.bloqueados.count
+     %tr.total
+      %td Total
+      %td.numero= @pu.count
+   %div{ :clear => "both" }

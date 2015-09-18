@@ -5,34 +5,29 @@ class MainController < ApplicationController
     @pu=PU.nacional
     @atu_ur = Atualizacao.find('ur')
     @atu_pu = Atualizacao.find('pu')
-    haml :index
   end
   
   def municipio
     @mu= Municipio.find(params['id'])
     @atu_ur = Atualizacao.find('ur')
     @atu_pu = Atualizacao.find('pu')
-    haml :municipio
   end
 
   def microrregiao
     @mr= Microrregiao.find(params['id'])
     @atu_ur = Atualizacao.find('ur')
     @atu_pu = Atualizacao.find('pu')
-    haml :microrregiao
   end
 
   def regiao
     @regiao= Regiao.find(params['id'])
     @atu_ur = Atualizacao.find('ur')
     @atu_pu = Atualizacao.find('pu')
-    haml :regiao
   end
 
   def estado
     @estado= Estado.find_by sigla: params['id'] 
     @atu_ur = Atualizacao.find('ur')
     @atu_pu = Atualizacao.find('pu')
-    haml :estado
   end
 end

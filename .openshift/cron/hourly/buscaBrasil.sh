@@ -1,9 +1,11 @@
 #!/bin/bash
 
+cd $OPENSHIFT_HOMEDIR/app-root/repo/scripts/
+
 USER='edulg'
 PASS='9u625o58'
 
-psql -d painel -U waze -c "delete from ur; delete from mp;" >> ${OPENSHIFT_LOG_DIR}/buscaBrasil.log
+psql -d painel -c "delete from ur; delete from mp;" >> ${OPENSHIFT_LOG_DIR}/buscaBrasil.log
 #echo "Regiao Norte"
 #ruby busca_UR.rb $USER $PASS -61.5 6 -59 5 1 >> ${OPENSHIFT_LOG_DIR}/buscaBrasil.log
 ruby busca_UR.rb $USER $PASS -66 5.3 -59 3 1  >> ${OPENSHIFT_LOG_DIR}/buscaBrasil.log
@@ -43,8 +45,8 @@ ruby busca_UR.rb $USER $PASS -57 -31 -50 -32 1 >> ${OPENSHIFT_LOG_DIR}/buscaBras
 ruby busca_UR.rb $USER $PASS -54.5 -32 -51.5 -33 1 >> ${OPENSHIFT_LOG_DIR}/buscaBrasil.log
 ruby busca_UR.rb $USER $PASS -54 -33 -52 -33.8 1 >> ${OPENSHIFT_LOG_DIR}/buscaBrasil.log
 
-psql -d painel -U waze -c 'update ur set municipioid = (select cd_geocmu from municipios where ST_Contains(geom, ur.posicao)) where municipioid is null;' >> ${OPENSHIFT_LOG_DIR}/buscaBrasil.log
-psql -d painel -U waze -c 'update mp set municipioid = (select cd_geocmu from municipios where ST_Contains(geom, mp.posicao)) where municipioid is null;' >> ${OPENSHIFT_LOG_DIR}/buscaBrasil.log
-#psql -d wazedb -U waze -c 'refresh materialized view vw_ur;' >> ${OPENSHIFT_LOG_DIR}/buscaBrasil.log
-#psql -d wazedb -U waze -c 'refresh materialized view vw_mp;' >> ${OPENSHIFT_LOG_DIR}/buscaBrasil.log
-psql -d painel -U waze -c "update atualizacao set data = current_timestamp where objeto = 'ur';" >> ${OPENSHIFT_LOG_DIR}/buscaBrasil.log
+psql -d painel -c 'update ur set municipioid = (select cd_geocmu from municipios where ST_Contains(geom, ur.posicao)) where municipioid is null;' >> ${OPENSHIFT_LOG_DIR}/buscaBrasil.log
+psql -d painel -c 'update mp set municipioid = (select cd_geocmu from municipios where ST_Contains(geom, mp.posicao)) where municipioid is null;' >> ${OPENSHIFT_LOG_DIR}/buscaBrasil.log
+psql -d painel -c 'select vw_ur_refresh_table();' >> ${OPENSHIFT_LOG_DIR}/buscaBrasil.log
+psql -d painel -c 'select vw_mp_refresh_table();' >> ${OPENSHIFT_LOG_DIR}/buscaBrasil.log
+psql -d painel -c "update atualizacao set data = current_timestamp where objeto = 'ur';" >> ${OPENSHIFT_LOG_DIR}/buscaBrasil.log

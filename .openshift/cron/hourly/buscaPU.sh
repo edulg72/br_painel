@@ -1,9 +1,11 @@
 #!/bin/bash
 
+cd $OPENSHIFT_HOMEDIR/app-root/repo/scripts/
+
 USER='edulg'
 PASS='9u625o58'
 
-psql -d painel -U waze -c 'delete from pu; delete from local;' > /dev/null >> ${OPENSHIFT_LOG_DIR}/buscaPU.log
+psql -d painel -c 'delete from pu; delete from local;' > /dev/null >> ${OPENSHIFT_LOG_DIR}/buscaPU.log
 ruby busca_PU.rb $USER $PASS -61.5 6 -59 5 1 >> ${OPENSHIFT_LOG_DIR}/buscaPU.log
 ruby busca_PU.rb $USER $PASS -66 5 -59 3 1 >> ${OPENSHIFT_LOG_DIR}/buscaPU.log
 ruby busca_PU.rb $USER $PASS -52.5 5 -50 3 1 >> ${OPENSHIFT_LOG_DIR}/buscaPU.log
@@ -40,7 +42,6 @@ ruby busca_PU.rb $USER $PASS -57 -31 -50 -32 1 >> ${OPENSHIFT_LOG_DIR}/buscaPU.l
 ruby busca_PU.rb $USER $PASS -54.5 -32 -51.5 -33 1 >> ${OPENSHIFT_LOG_DIR}/buscaPU.log
 ruby busca_PU.rb $USER $PASS -54 -33 -52 -34 1 >> ${OPENSHIFT_LOG_DIR}/buscaPU.log
 
-psql -d wazedb -U waze -c 'update pu set municipioid = (select cd_geocmu from municipios where ST_Contains(geom, pu.posicao)) where municipioid is null;' >> ${OPENSHIFT_LOG_DIR}/buscaPU.log
-#psql -d wazedb -U waze -c 'refresh materialized view vw_local;' >> ${OPENSHIFT_LOG_DIR}/buscaPU.log
-#psql -d wazedb -U waze -c 'refresh materialized view vw_pu;' >> ${OPENSHIFT_LOG_DIR}/buscaPU.log
-psql -d wazedb -U waze -c "update atualizacao set data = current_timestamp where objeto = 'pu';" >> ${OPENSHIFT_LOG_DIR}/buscaPU.log
+psql -d painel -c 'update pu set municipioid = (select cd_geocmu from municipios where ST_Contains(geom, pu.posicao)) where municipioid is null;' >> ${OPENSHIFT_LOG_DIR}/buscaPU.log
+psql -d painel -c 'select vw_pu_refresh_table;' >> ${OPENSHIFT_LOG_DIR}/buscaPU.log
+psql -d painel -c "update atualizacao set data = current_timestamp where objeto = 'pu';" >> ${OPENSHIFT_LOG_DIR}/buscaPU.log

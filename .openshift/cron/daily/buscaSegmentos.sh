@@ -1,5 +1,7 @@
 #!/bin/bash
 
+cd $OPENSHIFT_HOMEDIR/app-root/repo/scripts/
+
 psql -h 192.168.1.7 -d wazedb -U waze -c 'delete from segmentos;delete from ruas;delete from cidades;' > /dev/null
 echo "Pará"
 ruby busca_segmentos.rb $1 $2 -57 3 -46 -10 0.2

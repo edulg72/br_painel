@@ -21,4 +21,4 @@ ruby busca_segmentos.rb $USER $PASS -54 -33 -52 -34 0.2
 psql -d painel -c 'select vw_segmentos_refresh_table();'
 psql -d painel -c 'select vw_ruas_refresh_table();'
 psql -d painel -c 'select vw_cidades_refresh_table();'
-psql -d painel -c "update atualizacao set data = current_timestamp where objeto = 'segmentos';"
+psql -d painel -c "update atualizacao set data = current_timestamp as time zone 'BRT' where objeto = 'segmentos';"

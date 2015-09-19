@@ -50,5 +50,5 @@ psql -d painel -c 'update ur set municipioid = (select cd_geocmu from municipios
 psql -d painel -c 'update mp set municipioid = (select cd_geocmu from municipios where ST_Contains(geom, mp.posicao)) where municipioid is null;' >> ${OPENSHIFT_LOG_DIR}/buscaBrasil.log
 psql -d painel -c 'select vw_ur_refresh_table();' >> ${OPENSHIFT_LOG_DIR}/buscaBrasil.log
 psql -d painel -c 'select vw_mp_refresh_table();' >> ${OPENSHIFT_LOG_DIR}/buscaBrasil.log
-psql -d painel -c "update atualizacao set data = current_timestamp as time zone 'BRT' where objeto = 'ur';" >> ${OPENSHIFT_LOG_DIR}/buscaBrasil.log
+psql -d painel -c "update atualizacao set data = current_timestamp where objeto = 'ur';" >> ${OPENSHIFT_LOG_DIR}/buscaBrasil.log
 echo "Final de execucao: $(date '+%d/%m/%Y %H:%M:%S')" >> ${OPENSHIFT_LOG_DIR}/buscaBrasil.log

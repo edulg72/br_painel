@@ -1,7 +1,7 @@
 %script $(document).ready(function(){$(".estado").click(function(){$(".regioes").toggle();});});
 %script $(document).ready(function(){$(".pu_header").click(function(){$(".pus").toggle();});});
 %script $(document).ready(function(){$(".mp_header").click(function(){$(".mps").toggle();});});
-- cache [@estado,@atu_ur,@atu_pu] do
+- cache [@estado.urs.count,@atu_ur.data,@atu_pu.data] do
  %div.links
   %a{:href => "/"} P&aacute;gina inicial
  %h1.estado{:align => 'center'}= @estado.nm_estado

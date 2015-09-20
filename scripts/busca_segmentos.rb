@@ -81,7 +81,8 @@ rescue Mechanize::ResponseCodeError
 end
 login = agent.post('https://www.waze.com/login/create', {"user_id" => USER, "password" => PASS}, {"X-CSRF-Token" => csrf_token})
 
-db = PG::Connection.new(:hostaddr => ENV['OPENSHIFT_POSTGRESQL_DB_HOST'], :dbname => ENV['OPENSHIFT_APP_NAME'], :user => ENV['OPENSHIFT_POSTGRESQL_DB_USERNAME'], :password => ENV['OPENSHIFT_POSTGRESQL_DB_PASSWORD'])
+db = PG::Connection.new(:hostaddr => '192.168.1.7', :dbname => 'wazedb', :user => 'waze', :password => 'waze')
+#db = PG::Connection.new(:hostaddr => '10.4.106.116', :dbname => 'wazedb', :user => 'waze', :password => 'waze')
 db.prepare('insere_usuario','insert into usuario (id, username, rank) values ($1,$2,$3)')
 db.prepare('insere_rua','insert into ruas (id,nome,cidadeid,semnome) values ($1,$2,$3,$4)')
 db.prepare('insere_cidade','insert into cidades (id,nome,estadoid,paisid,semnome) values ($1,$2,$3,$4,$5)')
@@ -137,7 +138,7 @@ while lonIni < LongLeste do
       # Coleta os nomes das cidades na área
       json['cities']['objects'].each do |s|
 #        if db.exec_params('select * from cidades where id = $1',[s['id']]).ntuples == 0
-        if not cidades.include?(s['id']).to_s
+        if not cidades.include?(s['id'].to_s)
           db.exec_prepared('insere_cidade', [s['id'],s['name'],s['stateID'],s['countryID'],s['isEmpty']])
           cidades << s['id'].to_s
         end

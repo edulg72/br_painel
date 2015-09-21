@@ -1,6 +1,6 @@
 %script $(document).ready(function(){$(".pu_header").click(function(){$(".pus").toggle();});});
 %script $(document).ready(function(){$(".mp_header").click(function(){$(".mps").toggle();});});
-- cache [@mr,@atu_ur,@atu_pu] do
+- cache [@mr.urs.count,@atu_ur.data,@atu_pu.data] do
  %div.links
   %a{:href => "/regiao/#{@mr.regiaoid}"} Regi&atilde;o
   |

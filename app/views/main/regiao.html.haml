@@ -1,6 +1,6 @@
 %script $(document).ready(function(){$(".pu_header").click(function(){$(".pus").toggle();});});
 %script $(document).ready(function(){$(".mp_header").click(function(){$(".mps").toggle();});});
-- cache [@regiao.urs.count,@atu_ur.data,@atu_pu.data] do
+- cache [@regiao.cd_geocme,@regiao.urs.count,@atu_ur.data,@atu_pu.data] do
  %div.links
   %a{:href => "/#{@regiao.estado.sigla}"} Estado
   |

@@ -5,9 +5,9 @@
  %div.links
   %a{:href => "/"} P&aacute;gina inicial
  %h1.estado{:align => 'center'}= @estado.nm_estado
- %div.regioes{:align => "center"}
+ %ul.regioes{:align => "center"}
   - @estado.regioes.each do |r|
-   %div.regiao
+   %li.regiao
     %a{:href => "/regiao/#{r.cd_geocme}"}= r.nm_meso
  %div{:clear => "both"}
  = render partial: 'dados', locals: {area: @estado}

@@ -35,4 +35,9 @@ class MainController < ApplicationController
     @estado = EstadoWaze.find_by sigla: params['id']
     @atu_seg = Atualizacao.find('segmentos')
   end
+
+  def staff
+    @places = PU.bloqueados.nacional
+    @atu_pu = Atualizacao.find('pu')
+  end
 end

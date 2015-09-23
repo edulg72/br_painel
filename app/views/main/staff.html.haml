@@ -1,0 +1,17 @@
+- cache [@places.size, @atu_pu.data] do
+ %div.links
+  %a{:href => "/"} P&aacute;gina inicial
+ %h1{:align => 'center'}
+  Locais bloqueados pelo staff
+  com atualizações pendentes
+ %table{:border => '0', :cellspacing => '1', :cellpadding => '2', :align => 'center'}
+  %tr.encerradas
+   %th Estado
+   %th Cidade
+   %th Nome do local
+  - @places.order('municipioid').each do |p|
+   %tr.encerradas
+    %td{:align => 'center'}= p.municipio.microrregiao.regiao.estado.sigla
+    %td= p.municipio.nm_municip
+    %td
+     %a{:href => "https://www.waze.com/pt-BR/editor/?zoom=5\&lat=#{p.latitude}\&lon=#{p.longitude}\&showpur=#{p.id}\&endshow", :target => "WME"}= (p.nome_local.nil? or p.nome_local.strip.empty? ? '[Sem nome]': p.nome_local)

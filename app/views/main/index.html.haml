@@ -51,7 +51,8 @@
       %td Pendentes
       %td.numero= @pu.editaveis.count
      %tr
-      %td Bloqueados (staff)
+      %td
+       %a{:href => '/staff'} Bloqueados (staff)
       %td.numero= @pu.bloqueados.count
      %tr.total
       %td Total

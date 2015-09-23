@@ -192,7 +192,7 @@ body {
 }
 
 .ur a:visited {
-	color: #999;
+	color: #666;
 }
 
 .pu {
@@ -203,12 +203,16 @@ body {
 	font-size: 0.7em;
 }
 
+.pu a:visited {
+	color: #666;
+}
+
 a {
 	text-decoration: none;
 }
 
 .comentarios {
-	font-size: 0.6em;
+	font-size: 0.7em;
 	margin: 1px 2px;
 }
 
@@ -228,7 +232,7 @@ a {
 }
 
 .encerradas {
-	font-size: 0.7em;
+	font-size: 0.8em;
 	background-color: #EEE;
 }
 

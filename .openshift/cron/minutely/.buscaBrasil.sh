@@ -1,13 +1,14 @@
 #!/bin/bash
 
-if [ $((10#$(date +%M) % 30)) -eq 0 ];
-then
-  cd $OPENSHIFT_HOMEDIR/app-root/repo/scripts/
+cd $OPENSHIFT_HOMEDIR/app-root/repo/scripts/
 
-  USER='edulg'
-  PASS='9u625o58'
+USER='edulg'
+PASS='9u625o58'
 
-  echo "Inicio: $(date '+%d/%m/%Y %H:%M:%S')" > ${OPENSHIFT_LOG_DIR}/buscaBrasil.log 
+echo "Inicio: $(date '+%d/%m/%Y %H:%M:%S')" > ${OPENSHIFT_LOG_DIR}/buscaBrasil.log 
+
+case $((10#$(date +%M) % 20))
+ 1)
   psql -d painel -c "delete from ur; delete from mp;" >> ${OPENSHIFT_LOG_DIR}/buscaBrasil.log
   #echo "Regiao Norte"
   #ruby busca_UR.rb $USER $PASS -61.5 6 -59 5 1 >> ${OPENSHIFT_LOG_DIR}/buscaBrasil.log
@@ -31,7 +32,8 @@ then
   ruby busca_UR.rb $USER $PASS -61.5 -14 -38.5 -17 1 >> ${OPENSHIFT_LOG_DIR}/buscaBrasil.log
   sleep 15
   ruby busca_UR.rb $USER $PASS -58.5 -17 -38.5 -21 1 >> ${OPENSHIFT_LOG_DIR}/buscaBrasil.log
-  sleep 10
+  ;;
+ 2)
   ruby busca_UR.rb $USER $PASS -58.5 -21 -40.5 -23 .5 >> ${OPENSHIFT_LOG_DIR}/buscaBrasil.log
   sleep 10
   ruby busca_UR.rb $USER $PASS -55.5 -23 -47.5 -26 1 >> ${OPENSHIFT_LOG_DIR}/buscaBrasil.log
@@ -47,6 +49,8 @@ then
   ruby busca_UR.rb $USER $PASS -57 -31 -50 -32 1 >> ${OPENSHIFT_LOG_DIR}/buscaBrasil.log
   ruby busca_UR.rb $USER $PASS -54.5 -32 -51.5 -33 1 >> ${OPENSHIFT_LOG_DIR}/buscaBrasil.log
   ruby busca_UR.rb $USER $PASS -54 -33 -52 -33.8 1 >> ${OPENSHIFT_LOG_DIR}/buscaBrasil.log
+  ;;
+esac
 
   psql -d painel -c 'update ur set municipioid = (select cd_geocmu from municipios where ST_Contains(geom, ur.posicao)) where municipioid is null;' >> ${OPENSHIFT_LOG_DIR}/buscaBrasil.log
   psql -d painel -c 'update mp set municipioid = (select cd_geocmu from municipios where ST_Contains(geom, mp.posicao)) where municipioid is null;' >> ${OPENSHIFT_LOG_DIR}/buscaBrasil.log

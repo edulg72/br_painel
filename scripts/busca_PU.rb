@@ -65,10 +65,11 @@ def busca(db,agent,longOeste,latNorte,longLeste,latSul,passo,exec)
 
         # Coleta os dados dos PUs na area
         json['venues']['objects'].each do |v|
-          if db.exec_params('select id from local where id = $1',[v['id']]).ntuples == 0
-            db.exec_prepared('insere_local',[v['id'], v['name'], v['streetID'], (v.has_key?('createdOn') ? Time.at(v['createdOn']/1000) : nil), v['createdBy'], (v.has_key?('updatedOn') ? Time.at(v['updatedOn']/1000) : nil), v['updatedBy'], (v['geometry']['type']=='Point'? v['geometry']['coordinates'][0] : v['geometry']['coordinates'][0][0][0]), (v['geometry']['type']=='Point'? v['geometry']['coordinates'][1] : v['geometry']['coordinates'][0][0][1]), v['lockRank'], v['approved'], v['residential'], v['categories'][0], (v.has_key?('adLocked') ? v['adLocked'] : false) ])
-          end
           if v.has_key?('venueUpdateRequests')
+            if db.exec_params('select id from local where id = $1',[v['id']]).ntuples == 0
+              db.exec_prepared('insere_local',[v['id'], v['name'], v['streetID'], (v.has_key?('createdOn') ? Time.at(v['createdOn']/1000) : nil), v['createdBy'], (v.has_$
+            end
+
             pu = {'dateAdded' => (Time.now.to_i * 1000)}
             if v.has_key?('adLocked') and v['adLocked']
               pu['id']= v['venueUpdateRequests'][0]['id']

@@ -10,6 +10,7 @@ Rails.application.routes.draw do
 
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'
+  get '/segmentos' => 'main#segmentos'
   get '/:id' => 'main#estado'
   get '/:action/:id' => 'main'
 

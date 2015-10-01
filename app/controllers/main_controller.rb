@@ -32,7 +32,7 @@ class MainController < ApplicationController
   end
 
   def segmentos
-    @estado = EstadoWaze.find_by sigla: params['id']
-    @atu_seg = Atualizacao.find('segmentos')
+    @segmentos = Segmento.all
+    @atu_seg = Atualizacao.find('segments')
   end
 end

@@ -1,12 +1,18 @@
 - cache [@atu_seg.data] do
  %div.links
   %a{:href => "/"} P&aacute;gina inicial
- %h1.estado{:align => 'center'}= @estado.nm_estado
  %div.grupo
   %span.titulo Vias "sangrando"
   %span.atu= "Atualizado em #{@atu_seg.data.strftime('%d/%m/%Y %H:%M')}"
  %div.segmentos
-  - @estado.ruas.sangrando.each do |r|
-   - r.segmentos.each do |s|
-    %div.ur
-     %a{:href => "https://www.waze.com/pt-BR/editor/?zoom=5\&lat=#{s.latitude}\&lon=#{s.longitude}\&segments=#{s.id}", :target => "WME"}= s.id
+  - @segmentos.sangrando.each do |s|
+   %div.ur
+    %a{:href => "https://www.waze.com/pt-BR/editor/?zoom=5\&lat=#{s.latitude}\&lon=#{s.longitude}\&segments=#{s.id}", :target => "WME"}= s.id
+ %div{:style => 'clear: both;'}
+ %div.grupo
+  %span.titulo Estradas com tipo "Rua"
+  %span.atu= "Atualizado em #{@atu_seg.data.strftime('%d/%m/%Y %H:%M')}"
+ %div.segmentos
+  - @segmentos.where('roadtype=1 and length > 1500').each do |s|
+   %div.ur
+    %a{:href => "https://www.waze.com/pt-BR/editor/?zoom=5\&lat=#{s.latitude}\&lon=#{s.longitude}\&segments=#{s.id}", :target => "WME"}= s.id

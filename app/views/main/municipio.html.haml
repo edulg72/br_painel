@@ -10,5 +10,14 @@
   |
   %a{:href => "/"} P&aacute;gina inicial
  %h1{:align => 'center'}= @mu.microrregiao.regiao.estado.nm_estado
- %h3{:align => 'center'}= "#{@mu.microrregiao.regiao.nm_meso} / #{@mu.microrregiao.nm_micro} / #{@mu.nm_municip}"
+ %ul.regiao_atual{:align => 'center'}
+  %li
+   %span.titulo Regi&atilde;o
+   = @mu.microrregiao.regiao.nm_meso
+  %li
+   %span.titulo Microrregi&atilde;o
+   = @mu.microrregiao.nm_micro
+  %li
+   %span.titulo Munic&iacute;pio
+   = @mu.nm_municip
  = render partial: 'dados', locals: {area: @mu}

@@ -35,4 +35,9 @@ class MainController < ApplicationController
     @segmentos = Segmento.all
     @atu_seg = Atualizacao.find('segments')
   end
+
+  def staff
+    @places = PU.bloqueados.nacional
+    @atu_pu = Atualizacao.find('pu')
+  end
 end

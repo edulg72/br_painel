@@ -8,10 +8,16 @@
   |
   %a{:href => "/"} P&aacute;gina inicial
  %h1{:align => 'center'}= @mr.regiao.estado.nm_estado
- %h3{:align => 'center'}= "#{@mr.regiao.nm_meso} / #{@mr.nm_micro}"
- %div.regioes{:align => "center"}
+ %ul.regiao_atual{:align => 'center'}
+  %li
+   %span.titulo Regi&atilde;o
+   = @mr.regiao.nm_meso
+  %li
+   %span.titulo Microrregi&atilde;o
+   = @mr.nm_micro
+ %ul.regioes{:align => "center"}
   - @mr.municipios.order("nm_municip").each do |r|
-   %div.regiao
+   %li.regiao
     %a{:href => "/municipio/#{r.cd_geocmu}"}= r.nm_municip
  %div{:clear => "both"}
  = render partial: 'dados', locals: {area: @mr}

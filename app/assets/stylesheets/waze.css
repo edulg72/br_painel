@@ -34,7 +34,6 @@ body {
 	margin: 0 auto;
 	padding: 0;
 	background-color: #FFE;
-        
 }
 
 .header h1 {
@@ -108,16 +107,40 @@ body {
 	margin: 2px 0;
 }
 
+.regiao_atual {
+	padding: 0;
+	margin: 0 0 5px;
+	list-style-type: none;
+}
+
+.regiao_atual li {
+	display: inline;
+	font-size: 0.8em;
+	color: #EEE;
+	background-color: #666;
+	border: 1px solid #666;
+	border-radius: 5px;
+	padding: 2px;
+	margin: 2px;
+}
+
+.regiao_atual li .titulo {
+	font-size: 0.7em;
+	color: #BBB;
+	text-align: center;
+	padding-bottom: -15px;
+}
+
 .regioes {
-	display: block;
-	align-items: center;
 	padding: 3px;
+	margin: 3px 0;
+	list-style-type: none;
 }
 
 .regiao {
 	display: inline;
 	margin: 2px;
-	padding: 3px;
+	padding: 2px 3px;
         border-radius: 5px;
 	background-color: #EEE;
 }
@@ -164,6 +187,12 @@ body {
 	margin: 5px ;
 	padding: 4px;
 	border-radius: 8px;
+	font-size: 0.8em;
+	text-align: center;
+}
+
+.ur a:visited {
+	color: #666;
 }
 
 .pu {
@@ -174,12 +203,16 @@ body {
 	font-size: 0.7em;
 }
 
+.pu a:visited {
+	color: #666;
+}
+
 a {
 	text-decoration: none;
 }
 
 .comentarios {
-	font-size: 0.6em;
+	font-size: 0.7em;
 	margin: 1px 2px;
 }
 
@@ -201,6 +234,10 @@ a {
 .encerradas {
 	font-size: 0.8em;
 	background-color: #EEE;
+}
+
+.encerradas th {
+	background-color: #BBB;
 }
 
 .alerta {

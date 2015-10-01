@@ -6,10 +6,13 @@
   |
   %a{:href => "/"} P&aacute;gina inicial
  %h1{:align => 'center'}= @regiao.estado.nm_estado
- %h3{:align => 'center'}= "#{@regiao.nm_meso}"
- %div.regioes{:align => "center"}
+ %ul.regiao_atual{:align => 'center'}
+  %li
+   %span.titulo Regi&atilde;o
+   = "#{@regiao.nm_meso}"
+ %ul.regioes{:align => "center"}
   - @regiao.microrregioes.order("nm_micro").each do |r|
-   %div.regiao
+   %li.regiao
     %a{:href => "/microrregiao/#{r.cd_geocmi}"}= r.nm_micro
  %div{:clear => "both"}
  = render partial: 'dados', locals: {area: @regiao}

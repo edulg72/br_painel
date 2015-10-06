@@ -6,27 +6,34 @@
 # (c)2015 Eduardo Garcia <edulg72@gmail.com>
 #
 # Utilização:
-# trata_UR.rb <usuario> <senha> <dias para encerramento por inatividade> <longitude oeste> <latitude norte> <longitude leste> <latitude sul> [<sigla do estado>]
+# trata_UR.rb <usuario> <senha> <horas para encerramento por inatividade> <longitude oeste> <latitude norte> <longitude leste> <latitude sul> [<sigla do estado>]
 #
 require 'mechanize'
 require 'json'
 require 'pg'
 
 if ARGV.size < 7
-  puts "Uso: ruby trata_UR.rb <usuario> <senha> <dias para encerramento por inatividade> <longitude oeste> <latitude norte> <longitude leste> <latitude sul> [<sigla do estado>]"
+  puts "Uso: ruby trata_UR.rb <usuario> <senha> <horas para encerramento por inatividade> <longitude oeste> <latitude norte> <longitude leste> <latitude sul> [<sigla do estado>]"
   exit
 end
 
 USER = ARGV[0]
 PASS = ARGV[1]
-DIAS = ARGV[2].to_i
+HORAS = ARGV[2].to_i
 LongOeste = ARGV[3].to_f
 LatNorte = ARGV[4].to_f
 LongLeste = ARGV[5].to_f
 LatSul = ARGV[6].to_f
 Sigla = (ARGV.size > 7 ? ARGV[7] : nil)
 
-msgInicial = {0 => "Desculpe, mas pelos dados que aparecem no editor de mapas eu não consigo identificar o erro reportado. Você poderia descrever o problema encontrado?\n\nPara responder a esta mensagem basta digitar a resposta na caixa de texto abaixo, no próprio aplicativo."}
+msgInicial = {
+  0 => ["Desculpe, mas pelos dados que aparecem no editor de mapas eu não consigo identificar o erro reportado. Você poderia descrever o problema encontrado?\n\nPara responder a esta mensagem basta digitar a resposta na caixa de texto abaixo, no próprio aplicativo."], 
+  8 => ["Olá, wazer!\nEm qual trecho você percebeu problema com a rota oferecida?"],
+  10 => ["Olá, wazer!\nOlhando aqui não encontrei o erro apontado :/\nPode dar mais detalhes?","Olá, wazer!\nNão achei o problema no mapa!\nManda mais informações, por favor!","Com as informações que aparecem aqui pra mim, não consegui encontrar nenhum problema.\nManda mais informações pra eu poder ajudar!"], 
+  11 => ["Olá, wazer!\nQual curva exatamente é proibida nesse trecho?\nPreciso saber as ruas que se cruzam ;)"],
+  12 => ["Olá, wazer!\nPode detalhar o problema encontrado?"],
+  13 => ["Olá, wazer!\nPode detalhar o problema encontrado?"],
+  15 => ["Olá, wazer!\nAonde, aproximadamente, está esse problema no mapa?"]}
 
 msgEncerramento = "Impossível identificar o problema sem sua participação. :(\n\nOs mapas do Waze são criados e mantidos pelos próprios usuários, assim como eu e você. Participe! http://www.waze.com/editor/\n\nDúvidas, visite nosso forum:\nhttp://forum.wazebrasil.com"
 
@@ -74,7 +81,7 @@ while lonIni < LongLeste do
       wme['updateRequestSessions']['objects'].each do |u|
         if not (u.has_key?('routeGeometry') or (u.has_key?('routeInstructions') and u['routeInstructions'] != "") or u.has_key?('driveGeometry'))
 #          puts "https://www.waze.com/pt-BR/editor/?zoom=4&lat=#{urs[u['id']][1]}&lon=#{urs[u['id']][0]}&mapUpdateRequest=#{u['id']}"
-          agent.post("https://www.waze.com/row-Descartes-live/app/MapProblems/UpdateRequests/Comment", {"mapUpdateRequestID" => u['id'], "text" => ( msgInicial.has_key?(u['type']) ? msgInicial[u['type']] : msgInicial[0] )}, {"X-CSRF-Token" => csrf_token})
+          agent.post("https://www.waze.com/row-Descartes-live/app/MapProblems/UpdateRequests/Comment", {"mapUpdateRequestID" => u['id'], "text" => ( msgInicial.has_key?(u['type']) ? msgInicial[u['type']][rand(msgInicial[u['type']].size)] : msgInicial[0][0] )}, {"X-CSRF-Token" => csrf_token})
           agent.post("https://www.waze.com/row-Descartes-live/app/MapProblems/UpdateRequests/Notification", {"mapUpdateRequestID" => u['id'], "follow" => "true"}, {"X-CSRF-Token" => csrf_token})
         end
       end
@@ -84,10 +91,10 @@ while lonIni < LongLeste do
     urs.keys.each {|k| urs_area.delete(k) }
 
     # Procura URs com o ultimo comentario feito por um editor ha mais de DIAS
-    if DIAS > 0
+    if HORAS > 0
 #      puts "URs que serao encerradas apos #{DIAS} dias sem resposta"
       if urs_area.size > 0 
-        prazo = DIAS * 24 * 60 * 60
+        prazo = HORAS * 60 * 60
         ur = JSON.parse(agent.get("https://www.waze.com/row-Descartes-live/app/MapProblems/UpdateRequests?ids=#{urs_area.keys.join('%2C')}").body)
         ur['updateRequestSessions']['objects'].each do |u|
           if u.has_key?('comments') and u['comments'].size > 0 and (u['comments'][-1]['userID'] > 0) and ((Time.now.to_i - (u['comments'][-1]['createdOn']/1000)) > prazo)

@@ -45,8 +45,8 @@ rescue Mechanize::ResponseCodeError
 end
 login = agent.post('https://www.waze.com/login/create', {"user_id" => USER, "password" => PASS}, {"X-CSRF-Token" => csrf_token})
 
-#db = PG::Connection.new(:hostaddr => ENV['OPENSHIFT_POSTGRESQL_DB_HOST'], :dbname => ENV['OPENSHIFT_APP_NAME'], :user => ENV['OPENSHIFT_POSTGRESQL_DB_USERNAME'], :password => ENV['OPENSHIFT_POSTGRESQL_DB_PASSWORD'])
-db = PG::Connection.new(:hostaddr => '192.168.1.7', :dbname => 'wazedb', :user => 'waze', :password => 'waze')
+db = PG::Connection.new(:hostaddr => ENV['OPENSHIFT_POSTGRESQL_DB_HOST'], :dbname => ENV['OPENSHIFT_APP_NAME'], :user => ENV['OPENSHIFT_POSTGRESQL_DB_USERNAME'], :password => ENV['OPENSHIFT_POSTGRESQL_DB_PASSWORD'])
+#db = PG::Connection.new(:hostaddr => '192.168.1.7', :dbname => 'wazedb', :user => 'waze', :password => 'waze')
 db.prepare('localiza_estado',"select sigla from estados where sigla = '#{Sigla}' and ST_Contains(geom, ST_SetSRID(ST_Point($1, $2),4674))")
 
 ur_comentadas = 0

@@ -40,4 +40,8 @@ class MainController < ApplicationController
     @places = PU.bloqueados.nacional
     @atu_pu = Atualizacao.find('pu')
   end
+
+  def mapas
+    @estado = Estado.all
+  end
 end

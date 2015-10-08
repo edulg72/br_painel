@@ -27,7 +27,7 @@ LatSul = ARGV[6].to_f
 Sigla = (ARGV.size > 7 ? ARGV[7] : nil)
 
 msgInicial = {
-  0 => ["Desculpe, mas pelos dados que aparecem no editor de mapas eu não consigo identificar o erro reportado. Você poderia descrever o problema encontrado?\n\nPara responder a esta mensagem basta digitar a resposta na caixa de texto abaixo, no próprio aplicativo."], 
+  0 => ["Olá, wazer!\n\nNão consegui entender o problema :/\n\nPode fornecer mais detalhes, por favor?"], 
   8 => ["Olá, wazer!\nEm qual trecho você percebeu problema com a rota oferecida?"],
   10 => ["Olá, wazer!\nOlhando aqui não encontrei o erro apontado :/\nPode dar mais detalhes?","Olá, wazer!\nNão achei o problema no mapa!\nManda mais informações, por favor!","Com as informações que aparecem aqui pra mim, não consegui encontrar nenhum problema.\nManda mais informações pra eu poder ajudar!"], 
   11 => ["Olá, wazer!\nQual curva exatamente é proibida nesse trecho?\nPreciso saber as ruas que se cruzam ;)"],
@@ -45,9 +45,12 @@ rescue Mechanize::ResponseCodeError
 end
 login = agent.post('https://www.waze.com/login/create', {"user_id" => USER, "password" => PASS}, {"X-CSRF-Token" => csrf_token})
 
-db = PG::Connection.new(:hostaddr => ENV['OPENSHIFT_POSTGRESQL_DB_HOST'], :dbname => ENV['OPENSHIFT_APP_NAME'], :user => ENV['OPENSHIFT_POSTGRESQL_DB_USERNAME'], :password => ENV['OPENSHIFT_POSTGRESQL_DB_PASSWORD'])
-#db = PG::Connection.new(:hostaddr => '10.4.107.138', :dbname => 'wazedb', :user => 'waze', :password => 'waze')
+#db = PG::Connection.new(:hostaddr => ENV['OPENSHIFT_POSTGRESQL_DB_HOST'], :dbname => ENV['OPENSHIFT_APP_NAME'], :user => ENV['OPENSHIFT_POSTGRESQL_DB_USERNAME'], :password => ENV['OPENSHIFT_POSTGRESQL_DB_PASSWORD'])
+db = PG::Connection.new(:hostaddr => '192.168.1.7', :dbname => 'wazedb', :user => 'waze', :password => 'waze')
 db.prepare('localiza_estado',"select sigla from estados where sigla = '#{Sigla}' and ST_Contains(geom, ST_SetSRID(ST_Point($1, $2),4674))")
+
+ur_comentadas = 0
+ur_encerradas = 0
 
 lonIni = LongOeste
 while lonIni < LongLeste do
@@ -64,7 +67,7 @@ while lonIni < LongLeste do
     json = JSON.parse(wme.body)
 
     # Coleta os IDs e coordenadas de todas as URs na area
-    json['mapUpdateRequests']['objects'].each {|u| urs_area[u['id']] = u['geometry']['coordinates'] if Sigla.nil? or db.exec_prepared('localiza_estado', [u['geometry']['coordinates'][0], u['geometry']['coordinates'][1]]).ntuples > 0}
+    json['mapUpdateRequests']['objects'].each {|u| urs_area[u['id']] = {'coords' => u['geometry']['coordinates'], 'desc' => u['description']} if Sigla.nil? or db.exec_prepared('localiza_estado', [u['geometry']['coordinates'][0], u['geometry']['coordinates'][1]]).ntuples > 0}
 
     # Identifica as URs abertas sem descricao nem comentários abertas há pelo menos 2 horas
     urs = {}
@@ -80,9 +83,10 @@ while lonIni < LongLeste do
       wme = JSON.parse(agent.get("https://www.waze.com/row-Descartes-live/app/MapProblems/UpdateRequests?ids=#{urs.keys.join('%2C')}").body)
       wme['updateRequestSessions']['objects'].each do |u|
         if not (u.has_key?('routeGeometry') or (u.has_key?('routeInstructions') and u['routeInstructions'] != "") or u.has_key?('driveGeometry'))
-#          puts "https://www.waze.com/pt-BR/editor/?zoom=4&lat=#{urs[u['id']][1]}&lon=#{urs[u['id']][0]}&mapUpdateRequest=#{u['id']}"
+          puts "https://www.waze.com/pt-BR/editor/?zoom=4&lat=#{urs[u['id']][1]}&lon=#{urs[u['id']][0]}&mapUpdateRequest=#{u['id']}"
           agent.post("https://www.waze.com/row-Descartes-live/app/MapProblems/UpdateRequests/Comment", {"mapUpdateRequestID" => u['id'], "text" => ( msgInicial.has_key?(u['type']) ? msgInicial[u['type']][rand(msgInicial[u['type']].size)] : msgInicial[0][0] )}, {"X-CSRF-Token" => csrf_token})
           agent.post("https://www.waze.com/row-Descartes-live/app/MapProblems/UpdateRequests/Notification", {"mapUpdateRequestID" => u['id'], "follow" => "true"}, {"X-CSRF-Token" => csrf_token})
+          ur_comentadas += 1
         end
       end
     end
@@ -92,15 +96,16 @@ while lonIni < LongLeste do
 
     # Procura URs com o ultimo comentario feito por um editor ha mais de DIAS
     if HORAS > 0
-#      puts "URs que serao encerradas apos #{DIAS} dias sem resposta"
+#      puts "URs que serao encerradas apos #{HORAS} horas sem resposta"
       if urs_area.size > 0 
         prazo = HORAS * 60 * 60
         ur = JSON.parse(agent.get("https://www.waze.com/row-Descartes-live/app/MapProblems/UpdateRequests?ids=#{urs_area.keys.join('%2C')}").body)
         ur['updateRequestSessions']['objects'].each do |u|
-          if u.has_key?('comments') and u['comments'].size > 0 and (u['comments'][-1]['userID'] > 0) and ((Time.now.to_i - (u['comments'][-1]['createdOn']/1000)) > prazo)
-#            puts "https://www.waze.com/pt-BR/editor/?zoom=4&lat=#{urs_area[u['id']][1]}&lon=#{urs_area[u['id']][0]}&mapUpdateRequest=#{u['id']}"
+          if u.has_key?('comments') and u['comments'].size > 0 and (u['comments'][-1]['userID'] > 0) and ((Time.now.to_i - (u['comments'][-1]['createdOn']/1000)) > prazo) and (not u.has_key?('routeGeometry')) and (not u.has_key?('driveGeometry')) and urs_area[u['id']]['desc'].nil?
+#            puts "https://www.waze.com/pt-BR/editor/?zoom=4&lat=#{urs_area[u['id']]['coords'][1]}&lon=#{urs_area[u['id']]['coords'][0]}&mapUpdateRequest=#{u['id']}  description: #{urs_area[u['id']]['desc']}"
             agent.post("https://www.waze.com/row-Descartes-live/app/MapProblems/UpdateRequests/Comment", {'mapUpdateRequestID' => u['id'], "text" => msgEncerramento}, {"X-CSRF-Token" => csrf_token})
-            agent.put("https://www.waze.com/row-Descartes-live/app/Features?language=pt-BR&bbox=0%2C0%2C0%2C0", "{\"actions\":{\"name\":\"CompositeAction\",\"_subActions\":[{\"_objectType\":\"mapUpdateRequest\",\"action\":\"UPDATE\",\"attributes\":{\"open\":false,\"resolution\":1,\"id\":#{u['id']}}}]}}" , {"Content-Type" => "application/json", "X-CSRF-Token" => csrf_token})
+            agent.post("https://www.waze.com/row-Descartes-live/app/Features?language=pt-BR&bbox=0%2C0%2C0%2C0", "{\"actions\":{\"name\":\"CompositeAction\",\"_subActions\":[{\"_objectType\":\"mapUpdateRequest\",\"action\":\"UPDATE\",\"attributes\":{\"open\":false,\"resolution\":1,\"id\":#{u['id']}}}]}}" , {"Content-Type" => "application/json", "X-CSRF-Token" => csrf_token})
+            ur_encerradas += 1
           end
         end
       end
@@ -110,3 +115,5 @@ while lonIni < LongLeste do
   end
   lonIni = lonFim
 end
+
+puts "URs comentadas: #{ur_comentadas}\nURs encerradas: #{ur_encerradas}"

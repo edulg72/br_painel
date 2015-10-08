@@ -1,0 +1,3 @@
+%div.opcoes_mapa
+ %form{:action => 'mapas', :method => 'post'}
+  = collection_select(:mapa, :estado, @estado, :cd_geocmu, :nm_estado)

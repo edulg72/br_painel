@@ -5,7 +5,7 @@
   %span.titulo Vias "sangrando"
   %span.atu= "Atualizado em #{@atu_seg.data.strftime('%d/%m/%Y %H:%M')}"
  %div.segmentos
-  - @segmentos.sangrando.each do |s|
+  - @segmentos.brasil.sangrando.order('id desc').each do |s|
    %div.ur
     %a{:href => "https://www.waze.com/pt-BR/editor/?zoom=5\&lat=#{s.latitude}\&lon=#{s.longitude}\&segments=#{s.id}", :target => "WME"}= s.id
  %div{:style => 'clear: both;'}
@@ -13,6 +13,6 @@
   %span.titulo Estradas com tipo "Rua"
   %span.atu= "Atualizado em #{@atu_seg.data.strftime('%d/%m/%Y %H:%M')}"
  %div.segmentos
-  - @segmentos.where('roadtype=1 and length > 1500').each do |s|
+  - @segmentos.brasil.where('roadtype=1 and length > 1500').each do |s|
    %div.ur
     %a{:href => "https://www.waze.com/pt-BR/editor/?zoom=5\&lat=#{s.latitude}\&lon=#{s.longitude}\&segments=#{s.id}", :target => "WME"}= s.id

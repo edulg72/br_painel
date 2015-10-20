@@ -7,4 +7,5 @@ class Regiao < ActiveRecord::Base
   has_many :urs, through: :microrregioes
   has_many :mps, through: :microrregioes
   has_many :pus, through: :microrregioes
+  has_many :segmentos, through: :microrregioes
 end

@@ -1,0 +1,17 @@
+%h1= "#{@editor.username} [#{@editor.rank}]"
+- if @editor.edicoes.where("edited_on > (current_timestamp - interval '30 days')").size > 0
+ %div.grupo
+  %span.titulo Edi&ccedil;&otilde;es nos &uacute;ltimos 30 dias
+ %table{:border => "0", :cellspacing => "1", :cellpadding => "1"}
+  %tr.encerradas
+   %th Data
+   %th Munic&iacute;pio
+   %th Tipo
+   %th Descri&ccedil;&atilde;o
+  - @editor.edicoes.where("edited_on > (current_timestamp - interval '30 days')").order("edited_on desc").each do |e|
+   %tr.encerradas
+    %td= e.edited_on
+    %td= e.municipio.nm_municip if e.municipio
+    %td= (e.type == 'S' ? 'Segmento' : 'Place' )
+    %td 
+     %a{:href => "#{e.url}", :target => "WME"}= e.desc

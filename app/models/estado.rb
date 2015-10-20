@@ -6,4 +6,5 @@ class Estado < ActiveRecord::Base
   has_many :urs, through: :regioes
   has_many :mps, through: :regioes
   has_many :pus, through: :regioes
+  has_many :segmentos, through: :regioes
 end

@@ -5,9 +5,10 @@
   %span.titulo Vias "sangrando"
   %span.atu= "Atualizado em #{@atu_seg.data.strftime('%d/%m/%Y %H:%M')}"
  %div.segmentos
-  - @segmentos.brasil.sangrando.order('id desc').each do |s|
-   %div.ur
+  - @segmentos.brasil.sangrando.includes(:municipio).order('municipios.nm_municip').each do |s|
+   %div.ur.verde
     %a{:href => "https://www.waze.com/pt-BR/editor/?zoom=5\&lat=#{s.latitude}\&lon=#{s.longitude}\&segments=#{s.id}", :target => "WME"}= s.id
+    %p.comentarios= s.municipio.nm_municip
  %div{:style => 'clear: both;'}
  %div.grupo
   %span.titulo Estradas com tipo "Rua"

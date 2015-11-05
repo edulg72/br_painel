@@ -42,8 +42,8 @@ db.prepare('insere_mp','insert into mp (id,resolvida_por,resolvida_em,peso,posic
 db.prepare('insere_ur',"insert into ur (id,posicao,resolvida_por,resolvida_em,data_abertura,resolucao) values ($1,ST_SetSRID(ST_Point($2, $3), 4674),$4,$5,$6,$7)")
 db.prepare('update_ur','update ur set comentarios = $1, ultimo_comentario = $2, data_ultimo_comentario = $3, autor_comentario = $4 where id = $5') 
 
-$usuario = {}
-db.exec('select * from usuario').each {|u| $usuario[u['id']] = u['rank']}
+#$usuario = {}
+#db.exec('select * from usuario').each {|u| $usuario[u['id']] = u['rank']}
 
 def busca(db,agent,longOeste,latNorte,longLeste,latSul,passo,exec)
   lonIni = longOeste
@@ -63,14 +63,13 @@ def busca(db,agent,longOeste,latNorte,longLeste,latSul,passo,exec)
 
         # Coleta os usuários que editaram na área
         json['users']['objects'].each do |u|
-          if $usuario.keys.include?(u['id'].to_s)
-            if $usuario[u['id'].to_s] != (u['rank']+1)
-              db.exec_prepared('update_usuario', [u['id'],u['userName'],u['rank']+1]) if $usuario[u['id'].to_s] != (u['rank']+1)
-              $usuario[u['id'].to_s] = u['rank']+1
+          usuario = db.exec_params('select rank from usuario where id = $1',[u['id']])
+          if usuario.ntuples > 0
+            if usuario[0]['rank'] != (u['rank']+1)
+              db.exec_prepared('update_usuario', [u['id'],u['userName'],u['rank']+1])
             end
           else
             db.exec_prepared('insere_usuario', [u['id'],u['userName'],u['rank']+1])
-            $usuario[u['id'].to_s] = u['rank']+1
           end
         end
 

@@ -31,6 +31,7 @@ agent = Mechanize.new
 begin
   page = agent.get "https://www.waze.com/row-Descartes-live/app/Session"
 rescue Mechanize::ResponseCodeError
+  sleep 5
   csrf_token = agent.cookie_jar.jar['www.waze.com']['/']['_csrf_token'].value
 end
 login = agent.post('https://www.waze.com/login/create', {"user_id" => USER, "password" => PASS}, {"X-CSRF-Token" => csrf_token})

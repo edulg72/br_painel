@@ -28,22 +28,22 @@ LatSul = ARGV[5].to_f
 Passo = ARGV[6].to_f
 
 agent = Mechanize.new
-connected = false
-retries = 0
-until connected or retries > 10 do
+#connected = false
+#retries = 0
+#until connected or retries > 10 do
   begin
     page = agent.get "https://www.waze.com/row-Descartes-live/app/Session"
   rescue Mechanize::ResponseCodeError
-    csrf_token = agent.cookie_jar.jar['www.waze.com']['/']['_csrf_token'].value if agent.cookie_jar.jar.size > 0
+    csrf_token = agent.cookie_jar.jar['www.waze.com']['/']['_csrf_token'].value
   end
-  begin
+#  begin
     login = agent.post('https://www.waze.com/login/create', {"user_id" => USER, "password" => PASS}, {"X-CSRF-Token" => csrf_token})
-    connected = true
-  rescue Mechanize::ResponseCodeError
-    retries += 1
-    sleep 5
-  end
-end
+#    connected = true
+#  rescue Mechanize::ResponseCodeError
+#    retries += 1
+#    sleep 5
+#  end
+#end
 
 db = PG::Connection.new(:hostaddr => ENV['OPENSHIFT_POSTGRESQL_DB_HOST'], :dbname => ENV['OPENSHIFT_APP_NAME'], :user => ENV['OPENSHIFT_POSTGRESQL_DB_USERNAME'], :password => ENV['OPENSHIFT_POSTGRESQL_DB_PASSWORD'])
 db.prepare('insere_usuario','insert into usuario (id, username, rank) values ($1,$2,$3)')

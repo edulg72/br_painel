@@ -27,23 +27,19 @@ LongLeste = ARGV[4].to_f
 LatSul = ARGV[5].to_f
 Passo = ARGV[6].to_f
 
-agent = Mechanize.new
-#connected = false
-#retries = 0
-#until connected or retries > 10 do
+agent = Mechanize.new 
+count = 0
+while agent.cookie_jar.jar.empty?
   begin
     page = agent.get "https://www.waze.com/row-Descartes-live/app/Session"
   rescue Mechanize::ResponseCodeError
-    csrf_token = agent.cookie_jar.jar['www.waze.com']['/']['_csrf_token'].value
+    csrf_token = agent.cookie_jar.jar['www.waze.com']['/']['_csrf_token'].value if agent.cookie_jar.jar.size > 0
+    sleep (2 * (count + 1))
   end
-#  begin
-    login = agent.post('https://www.waze.com/login/create', {"user_id" => USER, "password" => PASS}, {"X-CSRF-Token" => csrf_token})
-#    connected = true
-#  rescue Mechanize::ResponseCodeError
-#    retries += 1
-#    sleep 5
-#  end
-#end
+  count += 1
+end
+puts "Tentativas: #{count}"
+login = agent.post('https://www.waze.com/login/create', {"user_id" => USER, "password" => PASS}, {"X-CSRF-Token" => csrf_token})
 
 db = PG::Connection.new(:hostaddr => ENV['OPENSHIFT_POSTGRESQL_DB_HOST'], :dbname => ENV['OPENSHIFT_APP_NAME'], :user => ENV['OPENSHIFT_POSTGRESQL_DB_USERNAME'], :password => ENV['OPENSHIFT_POSTGRESQL_DB_PASSWORD'])
 db.prepare('insere_usuario','insert into usuario (id, username, rank) values ($1,$2,$3)')
@@ -127,6 +123,7 @@ def busca(db,agent,longOeste,latNorte,longLeste,latSul,passo,exec)
       end
 
       latIni = latFim
+      sleep 2
     end
     lonIni = lonFim
   end

@@ -43,14 +43,14 @@ class MainController < ApplicationController
   end
   
   def options
-    @wme_url = (cookies['wme_url'].nil? ? 'https://www.waze.com/' : cookies['wme_url'])
-    @wme_language = (cookies['wme_language'].nil? ? 'pt-BR/' : cookies['wme_language'])
+    @wme_url = (cookies[:wme_url].nil? ? 'https://www.waze.com/' : cookies[:wme_url])
+    @wme_language = (cookies[:wme_language].nil? ? 'pt-BR/' : cookies[:wme_language])
     @nav = [{'Opções de visualização' => "#"},{ t('nav-first-page') => '/'}]
   end
   
   def save
-    cookies['wme_url'] = params['wme_url']
-    cookies['wme_language'] = params['wme_language']
+    cookies.permanent[:wme_url] = params['wme_url']
+    cookies.permanent[:wme_language] = params['wme_language']
     redirect_to action: 'index'
   end
 end

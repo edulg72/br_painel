@@ -30,13 +30,13 @@
       .panel-body
         .row
           - area.urs.abertas.sem_comentarios.order(:data_abertura).each do |u|
-            %a.btn.btn-sm{ 'style' => "margin-top: 5px;", :role => 'button', :class => "#{(Time.now - u.data_abertura) < 172800 ? 'btn-success' : ((Time.now - u.data_abertura) < 1209600 ? 'btn-warning' : 'btn-danger')}", :href => "#{cookies['wme_url'].nil? ? 'https://www.waze.com/' : cookies['wme_url']}#{cookies['wme_language'].nil? ? 'pt-BR/' : cookies['wme_language']}editor/?zoom=5\&lat=#{u.latitude}\&lon=#{u.longitude}\&mapUpdateRequest=#{u.id}", :target => "WME"}= u.id
+            %a.btn.btn-sm{ 'style' => "margin-top: 5px;", :role => 'button', :class => "#{(Time.now - u.data_abertura) < 172800 ? 'btn-success' : ((Time.now - u.data_abertura) < 1209600 ? 'btn-warning' : 'btn-danger')}", :href => "#{cookies[:wme_url].nil? ? 'https://www.waze.com/' : cookies[:wme_url]}#{cookies[:wme_language].nil? ? 'pt-BR/' : cookies[:wme_language]}editor/?zoom=5\&lat=#{u.latitude}\&lon=#{u.longitude}\&mapUpdateRequest=#{u.id}", :target => "WME"}= u.id
     .panel.panel-default
       .panel-heading= t('ur-with-answer')
       .panel-body
         .row
           - area.urs.abertas.com_resposta.order(:data_ultimo_comentario).each do |u|
-            %a.btn.btn-sm{ 'style' => "margin-top: 5px;", :role => 'button', :class => "#{(Time.now - u.data_ultimo_comentario) < 172800 ? 'btn-success' : ((Time.now - u.data_ultimo_comentario) < 1209600 ? 'btn-warning' : 'btn-danger')}", :href => "#{cookies['wme_url'].nil? ? 'https://www.waze.com/' : cookies['wme_url']}#{cookies['wme_language'].nil? ? 'pt-BR/' : cookies['wme_language']}editor/?zoom=5\&lat=#{u.latitude}\&lon=#{u.longitude}\&mapUpdateRequest=#{u.id}", :target => "WME"}
+            %a.btn.btn-sm{ 'style' => "margin-top: 5px;", :role => 'button', :class => "#{(Time.now - u.data_ultimo_comentario) < 172800 ? 'btn-success' : ((Time.now - u.data_ultimo_comentario) < 1209600 ? 'btn-warning' : 'btn-danger')}", :href => "#{cookies[:wme_url].nil? ? 'https://www.waze.com/' : cookies[:wme_url]}#{cookies[:wme_language].nil? ? 'pt-BR/' : cookies[:wme_language]}editor/?zoom=5\&lat=#{u.latitude}\&lon=#{u.longitude}\&mapUpdateRequest=#{u.id}", :target => "WME"}
               = u.id
               %br
               %small= "#{u.comentarios} #{u.comentarios == 1 ? t('comment') : t('comments')}"
@@ -45,7 +45,7 @@
       .panel-body
         .row
           - area.urs.abertas.sem_resposta.order("comentarios desc, data_ultimo_comentario").each do |u|
-            %a.btn.btn-sm{ 'style' => "margin-top: 5px;", :role => 'button', :class => "#{(Time.now - u.data_ultimo_comentario) < 172800 ? 'btn-success' : ((Time.now - u.data_ultimo_comentario) < 1209600 ? 'btn-warning' : 'btn-danger')}", :href => "#{cookies['wme_url'].nil? ? 'https://www.waze.com/' : cookies['wme_url']}#{cookies['wme_language'].nil? ? 'pt-BR/' : cookies['wme_language']}editor/?zoom=5\&lat=#{u.latitude}\&lon=#{u.longitude}\&mapUpdateRequest=#{u.id}", :target => "WME"}
+            %a.btn.btn-sm{ 'style' => "margin-top: 5px;", :role => 'button', :class => "#{(Time.now - u.data_ultimo_comentario) < 172800 ? 'btn-success' : ((Time.now - u.data_ultimo_comentario) < 1209600 ? 'btn-warning' : 'btn-danger')}", :href => "#{cookies[:wme_url].nil? ? 'https://www.waze.com/' : cookies[:wme_url]}#{cookies[:wme_language].nil? ? 'pt-BR/' : cookies[:wme_language]}editor/?zoom=5\&lat=#{u.latitude}\&lon=#{u.longitude}\&mapUpdateRequest=#{u.id}", :target => "WME"}
               = u.id
               %br
               %small= "#{u.comentarios} #{u.comentarios == 1 ? t('comment') : t('comments')}"
@@ -64,7 +64,7 @@
           %td{:align => 'center'}= u.resolvida_em.strftime('%d/%m/%Y %H:%M')
           %td
             - if not u.operador.nil?
-              %a{:href => "#{cookies['wme_url'].nil? ? 'https://www.waze.com/' : cookies['wme_url']}#{cookies['wme_language'].nil? ? 'pt-BR/' : cookies['wme_language']}editor/?zoom=5\&lat=#{u.latitude}\&lon=#{u.longitude}\&mapUpdateRequest=#{u.id}", :target => "WME"}
+              %a{:href => "#{cookies[:wme_url].nil? ? 'https://www.waze.com/' : cookies[:wme_url]}#{cookies[:wme_language].nil? ? 'pt-BR/' : cookies[:wme_language]}editor/?zoom=5\&lat=#{u.latitude}\&lon=#{u.longitude}\&mapUpdateRequest=#{u.id}", :target => "WME"}
                 = "#{u.operador.username} (#{u.operador.rank})"
           %td{:align => 'center'}= (u.resolucao == 0 ? t('ur-result-solved') : t('ur-result-ni'))
           %td
@@ -77,11 +77,11 @@
         %span.text-right.small= "#{t('updated-at')} #{@atu_ur.data.strftime('%d/%m/%Y %H:%M')}"
     .row
       - area.mps.abertas.order("peso desc").each do |m|
-        %a.btn.btn-sm{ 'style' => "margin-top: 5px;", :role => 'button', :class => "#{m.peso < 4 ? 'btn-success' : (m.peso < 8 ? 'btn-warning' : 'btn-danger')}", :href => "#{cookies['wme_url'].nil? ? 'https://www.waze.com/' : cookies['wme_url']}#{cookies['wme_language'].nil? ? 'pt-BR/' : cookies['wme_language']}editor/?zoom=5\&lat=#{m.latitude}\&lon=#{m.longitude}\&mapProblem=#{m.id}", :target => "WME"}= m.id
+        %a.btn.btn-sm{ 'style' => "margin-top: 5px;", :role => 'button', :class => "#{m.peso < 4 ? 'btn-success' : (m.peso < 8 ? 'btn-warning' : 'btn-danger')}", :href => "#{cookies[:wme_url].nil? ? 'https://www.waze.com/' : cookies[:wme_url]}#{cookies[:wme_language].nil? ? 'pt-BR/' : cookies[:wme_language]}editor/?zoom=5\&lat=#{m.latitude}\&lon=#{m.longitude}\&mapProblem=#{m.id}", :target => "WME"}= m.id
   #pus.tab-pane.fade{ 'role' => 'tabpanel' }
     .row
       .col-sm-3.col-sm-offset-3.col-md-3.col-md-offset-9.col-lg-3.col-lg-offset-9
         %span.text-right.small= "#{t('updated-at')} #{@atu_pu.data.strftime('%d/%m/%Y %H:%M')}"
     .row
       - area.pus.editaveis.order("data_criacao").each do |p|
-        %a.btn.btn-sm{ 'style' => "margin-top: 5px;", :role => 'button', :class => "#{(Time.now - p.data_criacao) < 172800 ? 'btn-success' : ((Time.now - p.data_criacao) < 1209600 ? 'btn-warning' : 'btn-danger')}", :href => "#{cookies['wme_url'].nil? ? 'https://www.waze.com/' : cookies['wme_url']}#{cookies['wme_language'].nil? ? 'pt-BR/' : cookies['wme_language']}editor/?zoom=5\&lat=#{p.latitude}\&lon=#{p.longitude}\&showpur=#{p.id}\&endshow", :target => "WME"}= (p.nome_local.nil? or p.nome_local.strip.empty? ? "[#{t('noname')}]": p.nome_local)
+        %a.btn.btn-sm{ 'style' => "margin-top: 5px;", :role => 'button', :class => "#{(Time.now - p.data_criacao) < 172800 ? 'btn-success' : ((Time.now - p.data_criacao) < 1209600 ? 'btn-warning' : 'btn-danger')}", :href => "#{cookies[:wme_url].nil? ? 'https://www.waze.com/' : cookies[:wme_url]}#{cookies[:wme_language].nil? ? 'pt-BR/' : cookies[:wme_language]}editor/?zoom=5\&lat=#{p.latitude}\&lon=#{p.longitude}\&showpur=#{p.id}\&endshow", :target => "WME"}= (p.nome_local.nil? or p.nome_local.strip.empty? ? "[#{t('noname')}]": p.nome_local)

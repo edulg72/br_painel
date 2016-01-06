@@ -1,13 +1,21 @@
-%h1.text-center Opções de visualização
+%h3.text-center Opções de visualização
+.alert.alert-warning.alert-dismissible{:role => 'alert'}
+  %button.close{'data-dismiss' => 'alert', 'aria-label' => 'Fechar'}
+    %span{'aria-hidden' => 'true'} &times;
+  %strong Atenção:
+  Para estas configurações funcionarem é necessário que seu navegador permita a gravação de 
+  %a.alert-link{:href => 'https://pt.wikipedia.org/wiki/Cookie_HTTP'} "cookies"
+  %br
+  As configurações funcionam apenas para este navegador/computador! Caso utilize o aplicativo em outros navegadores ou computadores basta repetir a configuração em cada um deles.
 = form_tag('/save', :class => 'form-horizontal', :method => 'POST') do
   .form-group
-    %label.col-sm-2.col-md-1.col-lg-1.control-label WME
-    .col-sm-10.col-md-11.col-lg-11
-      %select.form-control{:name => 'wme-url'}
+    %label.col-sm-4.col-md-3.col-lg-2.control-label WME
+    .col-sm-8.col-md-9.col-lg-10
+      %select.form-control{:name => 'wme_url'}
         = options_for_select([['Padrão','https://www.waze.com/'],['Beta','https://editor-beta.waze.com/']],@wme_url)
   .form-group
-    %label.col-sm-2.col-md-1.col-lg-1.control-label Linguagem do editor
-    .col-sm-10.col-md-11.col-lg-11
-      %select.form-control{:name => 'wme-language'}
-        = options_for_select([['English',''],['UK English','en-GB'],['Español', 'es/'],['Español América Latina','es-419'],['Français','fr/'],['Italiano','it/'],['Русский','ru/'],['日本語','ja/'],['עברית ','he/'],['Deutsch','de/'],['Română','ro/'],['Türkçe','tr/'],['Afrikaans','af/'],['Čeština','cs/'],['한국어 ','ko/'],['Melayu','ms/'],['Polski','pl/'],['Português (Brasil)','pt-BR/'],['Português','pt-PT'],['Magyar','hu/'],['Nederlands','nl/'],['Svenska','sv/'],['Norsk','no/'],['Slovenčina','sk/'],['Dansk','da/'],['Galego','gl/'],['Lietuviškai','lt/'],['中文 (简体) ','zh/'],['中文（繁體） ','zh-TW/'],['Български ','bg/'],['Suomi ','fi/'],['Hrvatski ','hr/'],['Català ','ca/'],['eesti ','et/'],['Latviešu ','lv/'],['Srpski ','sr/'],['العربية ','ar/']],@wme_language)
+    %label.col-sm-4.col-md-3.col-lg-2.control-label Linguagem do editor
+    .col-sm-8.col-md-9.col-lg-10
+      %select.form-control{:name => 'wme_language'}
+        = options_for_select([['English',''],['UK English','en-GB/'],['Español', 'es/'],['Español América Latina','es-419/'],['Français','fr/'],['Italiano','it/'],['Русский','ru/'],['日本語','ja/'],['עברית ','he/'],['Deutsch','de/'],['Română','ro/'],['Türkçe','tr/'],['Afrikaans','af/'],['Čeština','cs/'],['한국어 ','ko/'],['Melayu','ms/'],['Polski','pl/'],['Português (Brasil)','pt-BR/'],['Português','pt-PT/'],['Magyar','hu/'],['Nederlands','nl/'],['Svenska','sv/'],['Norsk','no/'],['Slovenčina','sk/'],['Dansk','da/'],['Galego','gl/'],['Lietuviškai','lt/'],['中文 (简体) ','zh/'],['中文（繁體） ','zh-TW/'],['Български ','bg/'],['Suomi ','fi/'],['Hrvatski ','hr/'],['Català ','ca/'],['eesti ','et/'],['Latviešu ','lv/'],['Srpski ','sr/'],['العربية ','ar/']],@wme_language)
   %button.btn.btn-primary{:type => 'submit'} Gravar

@@ -7,6 +7,7 @@ PASS='9u625o58'
 
 echo "Inicio: $(date '+%d/%m/%Y %H:%M:%S')" > ${OPENSHIFT_LOG_DIR}/buscaPU.log
 psql -d painel -c 'delete from pu; delete from local;' >> ${OPENSHIFT_LOG_DIR}/buscaPU.log
+psql -c "vacuum;"
 ruby busca_PU.rb $USER $PASS -61.5 6 -59 5 1 >> ${OPENSHIFT_LOG_DIR}/buscaPU.log
 ruby busca_PU.rb $USER $PASS -66 5 -59 3 1 >> ${OPENSHIFT_LOG_DIR}/buscaPU.log
 ruby busca_PU.rb $USER $PASS -52.5 5 -50 3 1 >> ${OPENSHIFT_LOG_DIR}/buscaPU.log
@@ -46,6 +47,7 @@ ruby busca_PU.rb $USER $PASS -54 -33 -52 -34 1 >> ${OPENSHIFT_LOG_DIR}/buscaPU.l
 psql -d painel -c 'update pu set municipioid = (select cd_geocmu from municipios where ST_Contains(geom, pu.posicao)) where municipioid is null;' >> ${OPENSHIFT_LOG_DIR}/buscaPU.log
 psql -d painel -c 'select vw_pu_refresh_table();' >> ${OPENSHIFT_LOG_DIR}/buscaPU.log
 psql -d painel -c "update atualizacao set data = current_timestamp where objeto = 'pu';" >> ${OPENSHIFT_LOG_DIR}/buscaPU.log
+psql -c "vacuum analyze;"
 
 echo "Final de execucao: $(date '+%d/%m/%Y %H:%M:%S')" >> ${OPENSHIFT_LOG_DIR}/buscaPU.log
 

@@ -11,6 +11,7 @@ if [ `ps -ef | grep busca_UR | wc -l` -le "1" ]
     case $((10#$(date +%H) % 2)) in
       0)
         psql -d painel -c "delete from ur where ST_Y(posicao) > -17; delete from mp where ST_Y(posicao) > -17;"
+        psql -c "vacuum;"
         #echo "Regiao Norte"
         ruby busca_UR.rb $USER $PASS -66 5.3 -59 3 1 
         ruby busca_UR.rb $USER $PASS -52.5 5 -50 3 1
@@ -32,6 +33,7 @@ if [ `ps -ef | grep busca_UR | wc -l` -le "1" ]
         ;;
       1)
         psql -d painel -c "delete from ur where ST_Y(posicao) < -17; delete from mp where ST_Y(posicao) < -17;"
+        psql -c "vacuum;"
         ruby busca_UR.rb $USER $PASS -58.5 -17 -38.5 -21 1 
         ruby busca_UR.rb $USER $PASS -58.5 -21 -40.5 -23 0.5 
         ruby busca_UR.rb $USER $PASS -55.5 -23 -47.5 -26 1 
@@ -55,6 +57,7 @@ if [ `ps -ef | grep busca_UR | wc -l` -le "1" ]
     psql -d painel -c 'select vw_ur_refresh_table();'
     psql -d painel -c 'select vw_mp_refresh_table();'
     psql -d painel -c "update atualizacao set data = current_timestamp where objeto = 'ur';"
+    psql -c 'vacuum analyze;'
     echo "Final de execucao: $(date '+%d/%m/%Y %H:%M:%S')"
 else
     echo "[$(date '+%d/%m/%Y %H:%M:%S')] Já existe um script em execução"

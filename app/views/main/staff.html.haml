@@ -16,4 +16,4 @@
     %td= p.municipio.nm_municip
     %td= (p.nome_local.nil? or p.nome_local.strip.empty? ? '[Sem nome]': p.nome_local) 
     %td
-     %a{:href => "https://www.waze.com/pt-BR/editor/?zoom=5\&lat=#{p.latitude}\&lon=#{p.longitude}\&showpur=#{p.id}\&endshow", :target => "WME"}= "https://www.waze.com/pt-BR/editor/?zoom=5\&lat=#{p.latitude}\&lon=#{p.longitude}\&showpur=#{p.id}\&endshow" 
+     %a{:href => "https://www.waze.com/editor/?zoom=5\&lat=#{p.latitude}\&lon=#{p.longitude}\&showpur=#{p.id}\&endshow", :target => "WME"}= "https://www.waze.com/editor/?zoom=5\&lat=#{p.latitude}\&lon=#{p.longitude}\&showpur=#{p.id}\&endshow" 

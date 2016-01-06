@@ -1,23 +1,5 @@
-%script $(document).ready(function(){$(".pu_header").click(function(){$(".pus").toggle();});});
-%script $(document).ready(function(){$(".mp_header").click(function(){$(".mps").toggle();});});
 - cache [@mu.cd_geocmu,@mu.urs.count,@atu_ur.data,@atu_pu.data] do
- %div.links
-  %a{:href => "/microrregiao/#{@mu.microrregiaoid}"} Microrregi&atilde;o
-  |
-  %a{:href => "/regiao/#{@mu.microrregiao.regiaoid}"} Regi&atilde;o
-  |
-  %a{:href => "/#{@mu.microrregiao.regiao.estado.sigla}"} Estado
-  |
-  %a{:href => "/"} P&aacute;gina inicial
- %h1{:align => 'center'}= @mu.microrregiao.regiao.estado.nm_estado
- %ul.regiao_atual{:align => 'center'}
-  %li
-   %span.titulo Regi&atilde;o
-   = @mu.microrregiao.regiao.nm_meso
-  %li
-   %span.titulo Microrregi&atilde;o
-   = @mu.microrregiao.nm_micro
-  %li
-   %span.titulo Munic&iacute;pio
-   = @mu.nm_municip
- = render partial: 'dados', locals: {area: @mu}
+  %h3.text-center
+    %small= @mu.microrregiao.regiao.estado.nm_estado + ' / ' + @mu.microrregiao.regiao.nm_meso + ' / ' + @mu.microrregiao.nm_micro + ' / '
+    = @mu.nm_municip
+  = render partial: 'dados', locals: {area: @mu}

@@ -1,18 +1,13 @@
-%script $(document).ready(function(){$(".pu_header").click(function(){$(".pus").toggle();});});
-%script $(document).ready(function(){$(".mp_header").click(function(){$(".mps").toggle();});});
 - cache [@regiao.cd_geocme,@regiao.urs.count,@atu_ur.data,@atu_pu.data] do
- %div.links
-  %a{:href => "/#{@regiao.estado.sigla}"} Estado
-  |
-  %a{:href => "/"} P&aacute;gina inicial
- %h1{:align => 'center'}= @regiao.estado.nm_estado
- %ul.regiao_atual{:align => 'center'}
-  %li
-   %span.titulo Regi&atilde;o
-   = "#{@regiao.nm_meso}"
- %ul.regioes{:align => "center"}
-  - @regiao.microrregioes.order("nm_micro").each do |r|
-   %li.regiao
-    %a{:href => "/microrregiao/#{r.cd_geocmi}"}= r.nm_micro
- %div{:clear => "both"}
- = render partial: 'dados', locals: {area: @regiao}
+  %h3.text-center
+    %small= @regiao.estado.nm_estado + ' / '
+    = @regiao.nm_meso
+    %small.dropdown
+      %button.btn.btn-default.dropdown-toggle{'type' => "button", 'id' => "dropdownMicro", 'data-toggle' => "dropdown", 'aria-haspopup' => "true", 'aria-expanded' => "true"}
+        Microrregião
+        %span.caret
+      %ul.dropdown-menu{ 'aria-labelledby' => "dropdownMicro"}
+        - @regiao.microrregioes.order(:nm_micro).each do |r|
+          %li
+            %a{:href => "/microrregiao/#{r.cd_geocmi}"}= r.nm_micro
+  = render partial: 'dados', locals: {area: @regiao}

@@ -1,13 +1,12 @@
-%script $(document).ready(function(){$(".estado").click(function(){$(".regioes").toggle();});});
-%script $(document).ready(function(){$(".pu_header").click(function(){$(".pus").toggle();});});
-%script $(document).ready(function(){$(".mp_header").click(function(){$(".mps").toggle();});});
 - cache [@estado.id,@estado.urs.count,@atu_ur.data,@atu_pu.data] do
- %div.links
-  %a{:href => "/"} P&aacute;gina inicial
- %h1.estado{:align => 'center'}= @estado.nm_estado
- %ul.regioes{:align => "center"}
-  - @estado.regioes.each do |r|
-   %li.regiao
-    %a{:href => "/regiao/#{r.cd_geocme}"}= r.nm_meso
- %div{:clear => "both"}
- = render partial: 'dados', locals: {area: @estado}
+  %h3.text-center
+    = @estado.nm_estado
+    %small.dropdown
+      %button.btn.btn-default.dropdown-toggle{'type' => "button", 'id' => "dropdownRegioes", 'data-toggle' => "dropdown", 'aria-haspopup' => "true", 'aria-expanded' => "true"}
+        Região
+        %span.caret
+      %ul.dropdown-menu{ 'aria-labelledby' => "dropdownRegioes"}
+        - @estado.regioes.order(:nm_meso).each do |r|
+          %li
+            %a{:href => "/regiao/#{r.cd_geocme}"}= r.nm_meso
+  = render partial: 'dados', locals: {area: @estado}

@@ -1,0 +1,13 @@
+%h1.text-center Opções de visualização
+= form_tag('/save', :class => 'form-horizontal', :method => 'POST') do
+  .form-group
+    %label.col-sm-2.col-md-1.col-lg-1.control-label WME
+    .col-sm-10.col-md-11.col-lg-11
+      %select.form-control{:name => 'wme-url'}
+        = options_for_select([['Padrão','https://www.waze.com/'],['Beta','https://editor-beta.waze.com/']],@wme_url)
+  .form-group
+    %label.col-sm-2.col-md-1.col-lg-1.control-label Linguagem do editor
+    .col-sm-10.col-md-11.col-lg-11
+      %select.form-control{:name => 'wme-language'}
+        = options_for_select([['English',''],['UK English','en-GB'],['Español', 'es/'],['Español América Latina','es-419'],['Français','fr/'],['Italiano','it/'],['Русский','ru/'],['日本語','ja/'],['עברית ','he/'],['Deutsch','de/'],['Română','ro/'],['Türkçe','tr/'],['Afrikaans','af/'],['Čeština','cs/'],['한국어 ','ko/'],['Melayu','ms/'],['Polski','pl/'],['Português (Brasil)','pt-BR/'],['Português','pt-PT'],['Magyar','hu/'],['Nederlands','nl/'],['Svenska','sv/'],['Norsk','no/'],['Slovenčina','sk/'],['Dansk','da/'],['Galego','gl/'],['Lietuviškai','lt/'],['中文 (简体) ','zh/'],['中文（繁體） ','zh-TW/'],['Български ','bg/'],['Suomi ','fi/'],['Hrvatski ','hr/'],['Català ','ca/'],['eesti ','et/'],['Latviešu ','lv/'],['Srpski ','sr/'],['العربية ','ar/']],@wme_language)
+  %button.btn.btn-primary{:type => 'submit'} Gravar

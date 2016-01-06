@@ -1,23 +1,14 @@
-%script $(document).ready(function(){$(".pu_header").click(function(){$(".pus").toggle();});});
-%script $(document).ready(function(){$(".mp_header").click(function(){$(".mps").toggle();});});
 - cache [@mr.cd_geocmi,@mr.urs.count,@atu_ur.data,@atu_pu.data] do
- %div.links
-  %a{:href => "/regiao/#{@mr.regiaoid}"} Regi&atilde;o
-  |
-  %a{:href => "/#{@mr.regiao.estado.sigla}"} Estado
-  |
-  %a{:href => "/"} P&aacute;gina inicial
- %h1{:align => 'center'}= @mr.regiao.estado.nm_estado
- %ul.regiao_atual{:align => 'center'}
-  %li
-   %span.titulo Regi&atilde;o
-   = @mr.regiao.nm_meso
-  %li
-   %span.titulo Microrregi&atilde;o
-   = @mr.nm_micro
- %ul.regioes{:align => "center"}
-  - @mr.municipios.order("nm_municip").each do |r|
-   %li.regiao
-    %a{:href => "/municipio/#{r.cd_geocmu}"}= r.nm_municip
- %div{:clear => "both"}
- = render partial: 'dados', locals: {area: @mr}
+  %h3.text-center
+    %small= @mr.regiao.estado.nm_estado + ' / ' + @mr.regiao.nm_meso + ' / '
+    = @mr.nm_micro
+    %small.dropdown
+      %button.btn.btn-default.dropdown-toggle{'type' => "button", 'id' => "dropdownCidade", 'data-toggle' => "dropdown", 'aria-haspopup' => "true", 'aria-expanded' => "true"}
+        Município
+        %span.caret
+      %ul.dropdown-menu{ 'aria-labelledby' => "dropdownCidade"}
+        - @mr.municipios.order(:nm_municip).each do |r|
+          %li
+            %a{:href => "/municipio/#{r.cd_geocmu}"}= r.nm_municip
+  = render partial: 'dados', locals: {area: @mr}
+

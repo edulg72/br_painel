@@ -13,6 +13,8 @@ Rails.application.routes.draw do
   get '/admin/:action/:id' => 'admin'
   get '/segmentos' => 'main#segmentos'
   get '/staff' => 'main#staff'
+  get '/options' => 'main#options'
+  post '/save' => 'main#save'
   get '/:id' => 'main#estado'
   get '/:action/:id' => 'main'
 

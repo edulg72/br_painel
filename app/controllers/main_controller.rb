@@ -1,7 +1,7 @@
 class MainController < ApplicationController
   def index
     @ur=UR.nacional
-    @mp=MP.nacional
+    @mp=MP.nacional.abertas
     @pu=PU.nacional
     @atu_ur = Atualizacao.find('ur')
     @atu_pu = Atualizacao.find('pu')

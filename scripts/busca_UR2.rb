@@ -21,7 +21,7 @@ if ARGV.size < 7
 end
 
 def point2txt(long,lat)
-  factory = RGeo::Geographic.projected_factory(:srid => 4674)
+  factory = RGeo::Geographic.projected_factory(:projection_proj4 => '+proj=longlat +ellps=GRS80 +no_defs', :projection_srid => 4674, :srid => 4674)
   str = ""
   factory.point(long, lat).as_binary.each_byte {|b| str += ('00' + b.to_s(16).upcase)[-2..-1]}
   return str

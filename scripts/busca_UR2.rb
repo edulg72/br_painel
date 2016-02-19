@@ -21,9 +21,9 @@ if ARGV.size < 7
 end
 
 def point2txt(long,lat)
-  factory = RGeo::Geographic.simple_mercator_factory()
+  factory = RGeo::Geographic.projected_factory(:srid => 4674)
   str = ""
-  factory.point(long, lat).as_binary.each {|b| str += ('00' + b.to_s(16))[-2..-1]}
+  factory.point(long, lat).as_binary.each_byte {|b| str += ('00' + b.to_s(16).upcase)[-2..-1]}
   return str
 end
 
@@ -52,9 +52,9 @@ login = agent.post('https://www.waze.com/login/create', {"user_id" => USER, "pas
 db = PG::Connection.new(:hostaddr => ENV['OPENSHIFT_POSTGRESQL_DB_HOST'], :dbname => ENV['OPENSHIFT_APP_NAME'], :user => ENV['OPENSHIFT_POSTGRESQL_DB_USERNAME'], :password => ENV['OPENSHIFT_POSTGRESQL_DB_PASSWORD'])
 #db.prepare('insere_usuario','insert into usuario (id, username, rank) values ($1,$2,$3)')
 #db.prepare('update_usuario','update usuario set username = $2, rank = $3 where id = $1')
-db.prepare('insere_mp','insert into mp (id,resolvida_por,resolvida_em,peso,posicao,resolucao) values ($1,$2,$3,$4,ST_SetSRID(ST_Point($5, $6), 4674),$7)')
-db.prepare('insere_ur',"insert into ur (id,posicao,resolvida_por,resolvida_em,data_abertura,resolucao) values ($1,ST_SetSRID(ST_Point($2, $3), 4674),$4,$5,$6,$7)")
-db.prepare('update_ur','update ur set comentarios = $1, ultimo_comentario = $2, data_ultimo_comentario = $3, autor_comentario = $4 where id = $5') 
+#db.prepare('insere_mp','insert into mp (id,resolvida_por,resolvida_em,peso,posicao,resolucao) values ($1,$2,$3,$4,ST_SetSRID(ST_Point($5, $6), 4674),$7)')
+#db.prepare('insere_ur',"insert into ur (id,posicao,resolvida_por,resolvida_em,data_abertura,resolucao) values ($1,ST_SetSRID(ST_Point($2, $3), 4674),$4,$5,$6,$7)")
+#db.prepare('update_ur','update ur set comentarios = $1, ultimo_comentario = $2, data_ultimo_comentario = $3, autor_comentario = $4 where id = $5') 
 
 @usuarios = {}
 @mps = {}
@@ -77,10 +77,10 @@ def busca(db,agent,longOeste,latNorte,longLeste,latSul,passo,exec)
         json = JSON.parse(wme.body)
 
         # Coleta os usuários que editaram na área
-        json['users']['objects'].each {|u| @usuarios[u['id']] = "#{u['id']},\"#{u['userName']}\",#{u['rank']+1}" if not @usuarios.has_key?(u['id']) }
+        json['users']['objects'].each {|u| @usuarios[u['id']] = "#{u['id']},\"#{u['userName']}\",#{u['rank']+1}\n" if not @usuarios.has_key?(u['id']) }
 
         # Coleta os dados sobre as MPs na area
-        json['problems']['objects'].each {|m| @mps[m['id']] = "#{m['id'][2..-1]},#{m['resolvedBy']},#{(m['resolvedOn'].nil? ? nil : Time.at(m['resolvedOn']/1000))},#{m['weight']},#{point2txt(m['geometry']['coordinates'][0], m['geometry']['coordinates'][1])},#{m['resolution']}" if not @mps.has_key?(m['id']) }
+        json['problems']['objects'].each {|m| @mps[m['id']] = "#{m['id'][2..-1]},#{m['resolvedBy']},#{(m['resolvedOn'].nil? ? nil : Time.at(m['resolvedOn']/1000))},#{m['weight']},#{point2txt(m['geometry']['coordinates'][0], m['geometry']['coordinates'][1])},#{m['resolution']}\n" if not @mps.has_key?(m['id']) }
 
         urs_area = {}
         # Coleta os IDs de todas as URs na area
@@ -90,7 +90,7 @@ def busca(db,agent,longOeste,latNorte,longLeste,latSul,passo,exec)
         if urs_area.size > 0 
           ur = JSON.parse(agent.get("https://www.waze.com/row-Descartes-live/app/MapProblems/UpdateRequests?ids=#{urs_area.keys.join('%2C')}").body)
        
-          ur['updateRequestSessions']['objects'].each {|u| @urs[u['id']] = "#{urs_area[u['id']]},#{(u.has_key?('comments') and u['comments'].size > 0 ? u['comments'].size : 0 )},#{(u.has_key?('comments') and u['comments'].size > 0 ? u['comments'][-1]['text'] : nil)},#{(u.has_key?('comments') and u['comments'].size > 0 ? Time.at(u['comments'][-1]['createdOn']/1000) : nil)},#{(u.has_key?('comments') and u['comments'].size > 0 ? u['comments'][-1]['userID'] : nil)}" if urs_area.has_key?(u['id'])}
+          ur['updateRequestSessions']['objects'].each {|u| @urs[u['id']] = "#{urs_area[u['id']]},#{(u.has_key?('comments') and u['comments'].size > 0 ? u['comments'].size : 0 )},#{(u.has_key?('comments') and u['comments'].size > 0 ? u['comments'][-1]['text'] : nil)},#{(u.has_key?('comments') and u['comments'].size > 0 ? Time.at(u['comments'][-1]['createdOn']/1000) : nil)},#{(u.has_key?('comments') and u['comments'].size > 0 ? u['comments'][-1]['userID'] : nil)}\n" if urs_area.has_key?(u['id'])}
           
 #              db.exec_prepared('update_ur', [(u.has_key?('comments') and u['comments'].size > 0 ? u['comments'].size : 0 ),(u.has_key?('comments') and u['comments'].size > 0 ? u['comments'][-1]['text'].gsub('"',"'") : nil), (u.has_key?('comments') and u['comments'].size > 0 ? Time.at(u['comments'][-1]['createdOn']/1000) : nil), (u.has_key?('comments') and u['comments'].size > 0 ? u['comments'][-1]['userID'] : nil), u['id']] )
         end
@@ -117,14 +117,20 @@ end
 
 busca(db,agent,LongOeste,LatNorte,LongLeste,LatSul,Passo,1)
 
-db.exec("delete from usuario where id in (#{@usuarios.keys.join(',')})")
-db.copy_data('COPY usuarios (id,username,rank) FROM STDIN CSV') do
+db.exec("delete from usuario where id in (#{@usuarios.keys.join(',')})") if @usuarios.size > 0
+db.copy_data('COPY usuario (id,username,rank) FROM STDIN CSV') do
   @usuarios.each_value {|u| db.put_copy_data u}
 end
-db.exec('vacuum usuarios')
+db.exec('vacuum usuario')
 
-db.exec("delete from mp where id in (#{@mps.keys.join(',')})")
+db.exec("delete from mp where id in (#{@mps.keys.join(',')})") if @mps.size > 0
 db.copy_data('COPY mp (id,resolvida_por,resolvida_em,peso,posicao,resolucao) FROM STDIN CSV') do
   @mps.each_value {|m| db.put_copy_data m}
 end
-db.exec('vacuum usuarios')
+db.exec('vacuum mp')
+
+db.exec("delete from ur where id in (#{@urs.keys.join(',')})") if @urs.size > 0
+db.copy_data('COPY ur (id,posicao,resolvida_por,resolvida_em,data_abertura,resolucao,comentarios,ultimo_comentario,data_ultimo_comentario,autor_comentario) FROM STDIN CSV') do
+  @urs.each_value {|u| db.put_copy_data u}
+end
+db.exec('vacuum ur')

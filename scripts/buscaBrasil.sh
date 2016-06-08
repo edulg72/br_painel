@@ -5,6 +5,7 @@ cd $OPENSHIFT_HOMEDIR/app-root/repo/scripts/
 USER='edulg'
 PASS='9u625o58'
 
+
 if [ `ps -ef | grep busca_UR | wc -l` -le "1" ]
   then 
     echo "Inicio: $(date '+%d/%m/%Y %H:%M:%S')"

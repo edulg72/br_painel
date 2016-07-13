@@ -9,7 +9,7 @@
 # busca_UR.rb <usuario> <senha> <longitude oeste> <latitude norte> <longitude leste> <latitude sul> <passo em graus*>
 #
 # * Define o tamanho dos quadrados das áreas para análise. Em regiões muito populosas usar valore pequenos para não sobrecarregar o server.
-# 
+#
 require 'mechanize'
 require 'pg'
 require 'json'
@@ -27,7 +27,7 @@ LongLeste = ARGV[4].to_f
 LatSul = ARGV[5].to_f
 Passo = ARGV[6].to_f
 
-agent = Mechanize.new 
+agent = Mechanize.new
 count = 0
 while agent.cookie_jar.jar.empty?
   begin
@@ -46,7 +46,7 @@ db.prepare('insere_usuario','insert into usuario (id, username, rank) values ($1
 db.prepare('update_usuario','update usuario set username = $2, rank = $3 where id = $1')
 db.prepare('insere_mp','insert into mp (id,resolvida_por,resolvida_em,peso,posicao,resolucao) values ($1,$2,$3,$4,ST_SetSRID(ST_Point($5, $6), 4674),$7)')
 db.prepare('insere_ur',"insert into ur (id,posicao,resolvida_por,resolvida_em,data_abertura,resolucao) values ($1,ST_SetSRID(ST_Point($2, $3), 4674),$4,$5,$6,$7)")
-db.prepare('update_ur','update ur set comentarios = $1, ultimo_comentario = $2, data_ultimo_comentario = $3, autor_comentario = $4 where id = $5') 
+db.prepare('update_ur','update ur set comentarios = $1, ultimo_comentario = $2, data_ultimo_comentario = $3, autor_comentario = $4 where id = $5')
 
 #$usuario = {}
 #db.exec('select * from usuario').each {|u| $usuario[u['id']] = u['rank']}
@@ -69,13 +69,15 @@ def busca(db,agent,longOeste,latNorte,longLeste,latSul,passo,exec)
 
         # Coleta os usuários que editaram na área
         json['users']['objects'].each do |u|
-          usuario = db.exec_params('select rank from usuario where id = $1',[u['id']])
-          if usuario.ntuples > 0
-            if usuario[0]['rank'] != (u['rank']+1)
-              db.exec_prepared('update_usuario', [u['id'],u['userName'],u['rank']+1])
+          if u['id'].to_i > 0
+            usuario = db.exec_params('select rank from usuario where id = $1',[u['id']])
+            if usuario.ntuples > 0
+              if usuario[0]['rank'] != (u['rank']+1)
+                db.exec_prepared('update_usuario', [u['id'],u['userName'],u['rank']+1])
+              end
+            else
+              db.exec_prepared('insere_usuario', [u['id'],u['userName'],u['rank']+1])
             end
-          else
-            db.exec_prepared('insere_usuario', [u['id'],u['userName'],u['rank']+1])
           end
         end
 
@@ -90,15 +92,15 @@ def busca(db,agent,longOeste,latNorte,longLeste,latSul,passo,exec)
 
         urs_area = []
         # Coleta os IDs de todas as URs na area
-        json['mapUpdateRequests']['objects'].each do |u| 
-          urs_area << u['id'] 
+        json['mapUpdateRequests']['objects'].each do |u|
+          urs_area << u['id']
           db.exec_prepared('insere_ur', [u['id'], u['geometry']['coordinates'][0], u['geometry']['coordinates'][1], u['resolvedBy'], (u['resolvedOn'].nil? ? nil : Time.at(u['resolvedOn']/1000)), Time.at(u['driveDate']/1000), u['resolution'] ] )
         end
 
         # Busca todas as informacoes sobre as URs encontradas
-        if urs_area.size > 0 
+        if urs_area.size > 0
           ur = JSON.parse(agent.get("https://www.waze.com/row-Descartes-live/app/MapProblems/UpdateRequests?ids=#{urs_area.join('%2C')}").body)
-       
+
           ur['updateRequestSessions']['objects'].each do |u|
             begin
               db.exec_prepared('update_ur', [(u.has_key?('comments') and u['comments'].size > 0 ? u['comments'].size : 0 ),(u.has_key?('comments') and u['comments'].size > 0 ? u['comments'][-1]['text'].gsub('"',"'") : nil), (u.has_key?('comments') and u['comments'].size > 0 ? Time.at(u['comments'][-1]['createdOn']/1000) : nil), (u.has_key?('comments') and u['comments'].size > 0 ? u['comments'][-1]['userID'] : nil), u['id']] )

@@ -35,6 +35,7 @@ pt:
   solution: "Solução"
   state: "Estado"
   updated-at: "Atualizado em"
+  unapproved-places: "PUs pendentes de aprovação"
   ur-awaiting-answer: "Aguardando resposta"
   ur-closed: "URs encerradas"
   ur-open: "URs abertas"

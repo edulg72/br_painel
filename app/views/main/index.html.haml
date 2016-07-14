@@ -11,7 +11,7 @@
             %span.panel-title User Requests (UR)
           %table.table
             %tbody
-              %tr            
+              %tr
                 %td= t('ur-without-comments')
                 %td.text-right= @ur.abertas.sem_comentarios.count
               %tr
@@ -40,7 +40,8 @@
           %table.table
             %tbody
               %tr
-                %td Pendentes
+                %td
+                  %a{:href => '/pendentes'} Pendentes
                 %td.text-right= @pu.editaveis.count
               %tr
                 %td

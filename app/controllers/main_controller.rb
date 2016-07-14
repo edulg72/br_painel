@@ -7,7 +7,7 @@ class MainController < ApplicationController
     @atu_pu = Atualizacao.find('pu')
     @nav = [{ t('nav-first-page') => '/'}]
   end
-  
+
   def municipio
     @mu= Municipio.find(params['id'])
     @atu_ur = Atualizacao.find('ur')
@@ -30,7 +30,7 @@ class MainController < ApplicationController
   end
 
   def estado
-    @estado= Estado.find_by sigla: params['id'] 
+    @estado= Estado.find_by sigla: params['id']
     @atu_ur = Atualizacao.find('ur')
     @atu_pu = Atualizacao.find('pu')
     @nav = [{ @estado.nm_estado => "#"},{ t('nav-first-page') => '/'}]
@@ -41,13 +41,19 @@ class MainController < ApplicationController
     @atu_pu = Atualizacao.find('pu')
     @nav = [{t('blocked-places') => "#"},{ t('nav-first-page') => '/'}]
   end
-  
+
+  def pendentes
+    @places = PU.nacional.editaveis
+    @atu_pu = Atualizacao.find('pu')
+    @nav = [{t('unapproved-places') => "#"},{ t('nav-first-page') => '/'}]
+  end
+
   def options
     @wme_url = (cookies[:wme_url].nil? ? 'https://www.waze.com/' : cookies[:wme_url])
     @wme_language = (cookies[:wme_language].nil? ? 'pt-BR/' : cookies[:wme_language])
     @nav = [{'Opções de visualização' => "#"},{ t('nav-first-page') => '/'}]
   end
-  
+
   def save
     cookies.permanent[:wme_url] = params['wme_url']
     cookies.permanent[:wme_language] = params['wme_language']

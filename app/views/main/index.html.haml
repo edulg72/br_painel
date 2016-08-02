@@ -29,6 +29,11 @@
             %img{ :src => "#{asset_path 'mp.png'}" }
             %span.panel-title Map Problems (MP)
           %table.table
+            %tbody
+              %tr
+                %td
+                  %a{:href => '/mps'} abertas
+                %td.text-right= @mp.abertas.count
             %tfoot
               %tr
                 %th.text-right= t('mp-total')

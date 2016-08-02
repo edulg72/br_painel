@@ -14,6 +14,7 @@ Rails.application.routes.draw do
   get '/segmentos' => 'main#segmentos'
   get '/staff' => 'main#staff'
   get '/pendentes' => 'main#pendentes'
+  get '/mps' => 'main#mps'
   get '/options' => 'main#options'
   post '/save' => 'main#save'
   get '/:id' => 'main#estado'

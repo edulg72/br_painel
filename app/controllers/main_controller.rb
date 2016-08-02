@@ -48,6 +48,12 @@ class MainController < ApplicationController
     @nav = [{t('unapproved-places') => "#"},{ t('nav-first-page') => '/'}]
   end
 
+  def mps
+    @mps = MP.nacional.abertas
+    @atu_mp = Atualizacao.find('ur')
+    @nav = [{t('mps') => "#"},{ t('nav-first-page') => '/'}]
+  end
+
   def options
     @wme_url = (cookies[:wme_url].nil? ? 'https://www.waze.com/' : cookies[:wme_url])
     @wme_language = (cookies[:wme_language].nil? ? 'pt-BR/' : cookies[:wme_language])

@@ -28,6 +28,8 @@ pt:
   date: "Data"
   editor: "Editor"
   last-comment: "Último comentário"
+  mp: "Problema no mapa"
+  mps: "Problemas no mapa"
   mp-total: "Total"
   nav-first-page: "Página inicial"
   noname: "Sem nome"

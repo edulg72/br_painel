@@ -49,7 +49,7 @@ class MainController < ApplicationController
   end
 
   def mps
-    @mps = MP.nacional.abertas
+    @mps = MP.nacional
     @atu_mp = Atualizacao.find('ur')
     @nav = [{t('mps') => "#"},{ t('nav-first-page') => '/'}]
   end

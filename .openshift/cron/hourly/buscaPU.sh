@@ -3,7 +3,7 @@
 cd $OPENSHIFT_HOMEDIR/app-root/repo/scripts/
 
 USER='edulg'
-PASS='9u625o58'
+PASS='xcdrtfygf6tr'
 
 echo "Inicio: $(date '+%d/%m/%Y %H:%M:%S')" > ${OPENSHIFT_LOG_DIR}/buscaPU.log
 case $((10#$(date +%H) % 2)) in
@@ -57,4 +57,3 @@ psql -d painel -c 'select vw_pu_refresh_table();' >> ${OPENSHIFT_LOG_DIR}/buscaP
 psql -c 'vacuum analyze;'
 
 echo "Final de execucao: $(date '+%d/%m/%Y %H:%M:%S')" >> ${OPENSHIFT_LOG_DIR}/buscaPU.log
-

@@ -3,7 +3,7 @@
 cd $OPENSHIFT_HOMEDIR/app-root/repo/scripts/
 
 USER='edulg'
-PASS='9u625o58'
+PASS='xcdrtfygf6tr'
 
 echo "Inicio: $(date '+%d/%m/%Y %H:%M:%S')" > ${OPENSHIFT_LOG_DIR}/buscaPU.log
 psql -d painel -c 'delete from pu; delete from local;' >> ${OPENSHIFT_LOG_DIR}/buscaPU.log
@@ -50,4 +50,3 @@ psql -d painel -c "update atualizacao set data = current_timestamp where objeto 
 psql -c "vacuum analyze;"
 
 echo "Final de execucao: $(date '+%d/%m/%Y %H:%M:%S')" >> ${OPENSHIFT_LOG_DIR}/buscaPU.log
-

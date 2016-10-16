@@ -20,7 +20,13 @@ case $((10#$(date +%H) % 2)) in
     ruby busca_PU.rb $USER $PASS -67.5 0 -43.5 -2 1 >> ${OPENSHIFT_LOG_DIR}/buscaPU.log
     ruby busca_PU.rb $USER $PASS -67.5 -2 -37.5 -4 1 >> ${OPENSHIFT_LOG_DIR}/buscaPU.log
     ruby busca_PU.rb $USER $PASS -73.5 -4 -34.5 -6 1 >> ${OPENSHIFT_LOG_DIR}/buscaPU.log
-    ruby busca_PU.rb $USER $PASS -75 -6 -34.5 -9 1 >> ${OPENSHIFT_LOG_DIR}/buscaPU.log
+    ruby busca_PU.rb $USER $PASS -75 -6 -34.5 -8 1 >> ${OPENSHIFT_LOG_DIR}/buscaPU.log
+
+    ruby busca_PU.rb $USER $PASS -75 -8 -43.5 -9 1 >> ${OPENSHIFT_LOG_DIR}/buscaPU.log
+    ruby busca_PU.rb $USER $PASS -43.5 -8 -43.2 -8.7 1 >> ${OPENSHIFT_LOG_DIR}/buscaPU.log
+    # Ghost Town => [-43.5,-8.7,-43.2,-9.0]
+    ruby busca_PU.rb $USER $PASS -43.2 -8 -34.5 -9 1 >> ${OPENSHIFT_LOG_DIR}/buscaPU.log
+
     ruby busca_PU.rb $USER $PASS -73.5 -9 -34.5 -11 1 >> ${OPENSHIFT_LOG_DIR}/buscaPU.log
     ruby busca_PU.rb $USER $PASS -72 -11 -36 -12 1 >> ${OPENSHIFT_LOG_DIR}/buscaPU.log
     sleep 15

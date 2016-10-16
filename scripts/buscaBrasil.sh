@@ -22,7 +22,13 @@ if [ `ps -ef | grep busca_UR | wc -l` -le "1" ]
         ruby busca_UR.rb $USER $PASS -67.5 0 -43.5 -2 1
         ruby busca_UR.rb $USER $PASS -67.5 -2 -37.5 -4 1
         ruby busca_UR.rb $USER $PASS -73.5 -4 -34.5 -6 1
-        ruby busca_UR.rb $USER $PASS -74 -6 -34.5 -9 1
+        ruby busca_UR.rb $USER $PASS -74 -6 -34.5 -8 1
+
+        ruby busca_UR.rb $USER $PASS -75 -8 -43.5 -9 1
+        ruby busca_UR.rb $USER $PASS -43.5 -8 -43.2 -8.7 1
+        # Ghost Town => [-43.5,-8.7,-43.2,-9.0]
+        ruby busca_UR.rb $USER $PASS -43.2 -8 -34.5 -9 1
+
         #echo "Norte e Nordeste (ate Alagoas)"
         sleep 15
         ruby busca_UR.rb $USER $PASS -73.5 -9 -34.5 -11 1

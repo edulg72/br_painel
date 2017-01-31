@@ -45,7 +45,7 @@ db = PG::Connection.new(:hostaddr => ENV['POSTGRESQL_DB_HOST'], :dbname => 'br_p
 db.prepare('insere_usuario','insert into usuario (id, username, rank) values ($1,$2,$3)')
 db.prepare('update_usuario','update usuario set username = $2, rank = $3 where id = $1')
 db.prepare('insere_mp','insert into mp (id,resolvida_por,resolvida_em,peso,posicao,resolucao) values ($1,$2,$3,$4,ST_SetSRID(ST_Point($5, $6), 4674),$7)')
-db.prepare('insere_ur',"insert into ur (id,posicao,resolvida_por,resolvida_em,data_abertura,resolucao) values ($1,ST_SetSRID(ST_Point($2, $3), 4674),$4,$5,$6,$7)")
+db.prepare('insere_ur',"insert into ur (id,posicao,resolvida_por,resolvida_em,data_abertura,resolucao,tipo) values ($1,ST_SetSRID(ST_Point($2, $3), 4674),$4,$5,$6,$7,$8)")
 db.prepare('update_ur','update ur set comentarios = $1, ultimo_comentario = $2, data_ultimo_comentario = $3, autor_comentario = $4 where id = $5')
 
 #$usuario = {}
@@ -93,8 +93,9 @@ def busca(db,agent,longOeste,latNorte,longLeste,latSul,passo,exec)
         urs_area = []
         # Coleta os IDs de todas as URs na area
         json['mapUpdateRequests']['objects'].each do |u|
+        #  puts "#{u}"
           urs_area << u['id']
-          db.exec_prepared('insere_ur', [u['id'], u['geometry']['coordinates'][0], u['geometry']['coordinates'][1], u['resolvedBy'], (u['resolvedOn'].nil? ? nil : Time.at(u['resolvedOn']/1000)), Time.at(u['driveDate']/1000), u['resolution'] ] )
+          db.exec_prepared('insere_ur', [u['id'], u['geometry']['coordinates'][0], u['geometry']['coordinates'][1], u['resolvedBy'], (u['resolvedOn'].nil? ? nil : Time.at(u['resolvedOn']/1000)), Time.at(u['driveDate']/1000), u['resolution'], u['type'] ] )
         end
 
         # Busca todas as informacoes sobre as URs encontradas

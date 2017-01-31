@@ -3,13 +3,13 @@
 #
 # busca_PU.rb
 # Popula tabelas em uma base PostgreSQL com os dados dos PUs de uma região.
-# (c)2015 Eduardo Garcia <edulg72@gmail.com>
+# (c)2015-2017 Eduardo Garcia <edulg72@gmail.com>
 #
 # Utilização:
 # busca_PU.rb <usuario> <senha> <longitude oeste> <latitude norte> <longitude leste> <latitude sul> <passo em graus*>
 #
 # * Define o tamanho dos quadrados das áreas para análise. Em regiões muito populosas usar valore pequenos para não sobrecarregar o server.
-# 
+#
 require 'mechanize'
 require 'pg'
 require 'json'
@@ -35,7 +35,7 @@ rescue Mechanize::ResponseCodeError
 end
 login = agent.post('https://www.waze.com/login/create', {"user_id" => USER, "password" => PASS}, {"X-CSRF-Token" => csrf_token})
 
-db = PG::Connection.new(:hostaddr => ENV['OPENSHIFT_POSTGRESQL_DB_HOST'], :dbname => ENV['OPENSHIFT_APP_NAME'], :user => ENV['OPENSHIFT_POSTGRESQL_DB_USERNAME'], :password => ENV['OPENSHIFT_POSTGRESQL_DB_PASSWORD'])
+db = PG::Connection.new(:hostaddr => ENV['POSTGRESQL_DB_HOST'], :dbname => 'br_painel', :user => ENV['POSTGRESQL_DB_USERNAME'], :password => ENV['POSTGRESQL_DB_PASSWORD'])
 db.prepare('insere_usuario','insert into usuario (id, username, rank) values ($1,$2,$3)')
 db.prepare('insere_pu','insert into pu (id, autor, nome_local, data_criacao, posicao,staff,localID) values ($1,$2,left($3,80),$4,ST_SetSRID(ST_Point($5, $6),4674),$7,$8)')
 db.prepare('insere_local','insert into local (id,nome,ruaID,criado_em,criado_por,alterado_em,alterado_por,posicao,lock,aprovado,residencial,categoria,staff) values ($1,$2,$3,$4,$5,$6,$7,ST_SetSRID(ST_Point($8,$9),4674),$10,$11,$12,$13,$14)')

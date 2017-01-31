@@ -1,1 +1,34 @@
-../.openshift/config/database.yml
+postgresql: &postgresql
+  adapter: postgresql
+  database: 'br_painel'
+  username: <%=ENV['POSTGRESQL_DB_USERNAME']%>
+  password: <%=ENV['POSTGRESQL_DB_PASSWORD']%>
+  host:     <%=ENV['POSTGRESQL_DB_HOST']%>
+  port:     <%=ENV['POSTGRESQL_DB_PORT']%>
+  min_messages: ERROR
+  reconnect: false
+
+defaults: &defaults
+  pool: 5
+  timeout: 5000
+  encoding: utf8
+  <<: *<%= ENV['RAILS_DB'] || "postgresql" %>
+
+development:
+  adapter: postgresql
+  database: br_painel
+  username: waze
+  password: waze
+  host:     127.0.0.1
+  port:     5432
+  min_messages: ERROR
+  reconnect: false
+  pool: 5
+  timeout: 5000
+  encoding: utf8
+
+test: &test
+  <<: *defaults
+
+production:
+  <<: *defaults

@@ -3,7 +3,7 @@
 #
 # trata_UR.rb
 # Faz o tratamento das User Requests (UR) de forma automática
-# (c)2015 Eduardo Garcia <edulg72@gmail.com>
+# (c)2015-2017 Eduardo Garcia <edulg72@gmail.com>
 #
 # Utilização:
 # trata_UR.rb <usuario> <senha> <horas para encerramento por inatividade> <longitude oeste> <latitude norte> <longitude leste> <latitude sul> [<sigla do estado>]
@@ -27,9 +27,9 @@ LatSul = ARGV[6].to_f
 Sigla = (ARGV.size > 7 ? ARGV[7] : nil)
 
 msgInicial = {
-  0 => ["Olá, wazer!\n\nNão consegui entender o problema :/\n\nPode fornecer mais detalhes, por favor?"], 
+  0 => ["Olá, wazer!\n\nNão consegui entender o problema :/\n\nPode fornecer mais detalhes, por favor?"],
   8 => ["Olá, wazer!\nEm qual trecho você percebeu problema com a rota oferecida?"],
-  10 => ["Olá, wazer!\nOlhando aqui não encontrei o erro apontado :/\nPode dar mais detalhes?","Olá, wazer!\nNão achei o problema no mapa!\nManda mais informações, por favor!","Com as informações que aparecem aqui pra mim, não consegui encontrar nenhum problema.\nManda mais informações pra eu poder ajudar!"], 
+  10 => ["Olá, wazer!\nOlhando aqui não encontrei o erro apontado :/\nPode dar mais detalhes?","Olá, wazer!\nNão achei o problema no mapa!\nManda mais informações, por favor!","Com as informações que aparecem aqui pra mim, não consegui encontrar nenhum problema.\nManda mais informações pra eu poder ajudar!"],
   11 => ["Olá, wazer!\nQual curva exatamente é proibida nesse trecho?\nPreciso saber as ruas que se cruzam ;)"],
   12 => ["Olá, wazer!\nPode detalhar o problema encontrado?"],
   13 => ["Olá, wazer!\nPode detalhar o problema encontrado?"],
@@ -45,7 +45,7 @@ rescue Mechanize::ResponseCodeError
 end
 login = agent.post('https://www.waze.com/login/create', {"user_id" => USER, "password" => PASS}, {"X-CSRF-Token" => csrf_token})
 
-db = PG::Connection.new(:hostaddr => ENV['OPENSHIFT_POSTGRESQL_DB_HOST'], :dbname => ENV['OPENSHIFT_APP_NAME'], :user => ENV['OPENSHIFT_POSTGRESQL_DB_USERNAME'], :password => ENV['OPENSHIFT_POSTGRESQL_DB_PASSWORD'])
+db = PG::Connection.new(:hostaddr => ENV['POSTGRESQL_DB_HOST'], :dbname => 'br_painel', :user => ENV['POSTGRESQL_DB_USERNAME'], :password => ENV['POSTGRESQL_DB_PASSWORD'])
 db.prepare('localiza_estado',"select sigla from estados where sigla = '#{Sigla}' and ST_Contains(geom, ST_SetSRID(ST_Point($1, $2),4674))")
 
 ur_comentadas = 0
@@ -96,7 +96,7 @@ while lonIni < LongLeste do
     # Procura URs com o ultimo comentario feito por um editor ha mais de DIAS
     if HORAS > 0
 #      puts "URs que serao encerradas apos #{HORAS} horas sem resposta"
-      if urs_area.size > 0 
+      if urs_area.size > 0
         prazo = HORAS * 60 * 60
         ur = JSON.parse(agent.get("https://www.waze.com/row-Descartes-live/app/MapProblems/UpdateRequests?ids=#{urs_area.keys.join('%2C')}").body)
         ur['updateRequestSessions']['objects'].each do |u|

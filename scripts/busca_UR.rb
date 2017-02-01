@@ -44,7 +44,7 @@ login = agent.post('https://www.waze.com/login/create', {"user_id" => USER, "pas
 db = PG::Connection.new(:hostaddr => ENV['POSTGRESQL_DB_HOST'], :dbname => 'br_painel', :user => ENV['POSTGRESQL_DB_USERNAME'], :password => ENV['POSTGRESQL_DB_PASSWORD'])
 db.prepare('insere_usuario','insert into usuario (id, username, rank) values ($1,$2,$3)')
 db.prepare('update_usuario','update usuario set username = $2, rank = $3 where id = $1')
-db.prepare('insere_mp','insert into mp (id,resolvida_por,resolvida_em,peso,posicao,resolucao) values ($1,$2,$3,$4,ST_SetSRID(ST_Point($5, $6), 4674),$7)')
+db.prepare('insere_mp','insert into mp (id,resolvida_por,resolvida_em,peso,posicao,resolucao,tipo) values ($1,$2,$3,$4,ST_SetSRID(ST_Point($5, $6), 4674),$7,$8)')
 db.prepare('insere_ur',"insert into ur (id,posicao,resolvida_por,resolvida_em,data_abertura,resolucao,tipo) values ($1,ST_SetSRID(ST_Point($2, $3), 4674),$4,$5,$6,$7,$8)")
 db.prepare('update_ur','update ur set comentarios = $1, ultimo_comentario = $2, data_ultimo_comentario = $3, autor_comentario = $4 where id = $5')
 
@@ -84,7 +84,8 @@ def busca(db,agent,longOeste,latNorte,longLeste,latSul,passo,exec)
         # Coleta os dados sobre as MPs na area
         json['problems']['objects'].each do |m|
           begin
-            db.exec_prepared('insere_mp',[m['id'][2..-1], m['resolvedBy'], (m['resolvedOn'].nil? ? nil : Time.at(m['resolvedOn']/1000)), m['weight'], m['geometry']['coordinates'][0], m['geometry']['coordinates'][1], m['resolution']])
+            # puts "#{m}"
+            db.exec_prepared('insere_mp',[m['id'][2..-1], m['resolvedBy'], (m['resolvedOn'].nil? ? nil : Time.at(m['resolvedOn']/1000)), m['weight'], m['geometry']['coordinates'][0], m['geometry']['coordinates'][1], m['resolution'], m['subType']])
           rescue PG::InvalidTextRepresentation
             puts "#{m}"
           end

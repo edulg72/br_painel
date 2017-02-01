@@ -37,7 +37,7 @@ login = agent.post('https://www.waze.com/login/create', {"user_id" => USER, "pas
 
 db = PG::Connection.new(:hostaddr => ENV['POSTGRESQL_DB_HOST'], :dbname => 'br_painel', :user => ENV['POSTGRESQL_DB_USERNAME'], :password => ENV['POSTGRESQL_DB_PASSWORD'])
 db.prepare('insere_usuario','insert into usuario (id, username, rank) values ($1,$2,$3)')
-db.prepare('insere_pu','insert into pu (id, autor, nome_local, data_criacao, posicao,staff,localID) values ($1,$2,left($3,80),$4,ST_SetSRID(ST_Point($5, $6),4674),$7,$8)')
+db.prepare('insere_pu','insert into pu (id, autor, nome_local, data_criacao, posicao,staff,tipo,subtipo,localID) values ($1,$2,left($3,80),$4,ST_SetSRID(ST_Point($5, $6),4674),$7,$8,$9,$10)')
 db.prepare('insere_local','insert into local (id,nome,ruaID,criado_em,criado_por,alterado_em,alterado_por,posicao,lock,aprovado,residencial,categoria,staff) values ($1,$2,$3,$4,$5,$6,$7,ST_SetSRID(ST_Point($8,$9),4674),$10,$11,$12,$13,$14)')
 
 def busca(db,agent,longOeste,latNorte,longLeste,latSul,passo,exec)
@@ -66,6 +66,7 @@ def busca(db,agent,longOeste,latNorte,longLeste,latSul,passo,exec)
         # Coleta os dados dos PUs na area
         json['venues']['objects'].each do |v|
           if v.has_key?('venueUpdateRequests')
+            #puts "#{v}"
             if db.exec_params('select id from local where id = $1',[v['id']]).ntuples == 0
               db.exec_prepared('insere_local',[v['id'], v['name'], v['streetID'], (v.has_key?('createdOn') ? Time.at(v['createdOn']/1000) : nil), v['createdBy'], (v.has_key?('updatedOn') ? Time.at(v['updatedOn']/1000) : nil), v['updatedBy'], (v['geometry']['type']=='Point'? v['geometry']['coordinates'][0] : v['geometry']['coordinates'][0][0][0]), (v['geometry']['type']=='Point'? v['geometry']['coordinates'][1] : v['geometry']['coordinates'][0][0][1]), v['lockRank'], v['approved'], v['residential'], v['categories'][0], (v.has_key?('adLocked') ? v['adLocked'] : false) ])
             end
@@ -81,6 +82,8 @@ def busca(db,agent,longOeste,latNorte,longLeste,latSul,passo,exec)
               pu['latitude']= (v['geometry']['type']=='Point'? v['geometry']['coordinates'][1] : v['geometry']['coordinates'][0][0][1])
               pu['adLocked']= true
               pu['placeID']= v['id']
+              pu['type']= v['venueUpdateRequests'][0]['type']
+              pu['subType']= v['venueUpdateRequests'][0]['subType']
             else
               v['venueUpdateRequests'].each do |vu|
                 if vu.has_key?('dateAdded') and vu['dateAdded'] < pu['dateAdded']
@@ -93,12 +96,14 @@ def busca(db,agent,longOeste,latNorte,longLeste,latSul,passo,exec)
                   pu['latitude']= (v['geometry']['type']=='Point'? v['geometry']['coordinates'][1] : v['geometry']['coordinates'][0][0][1])
                   pu['adLocked']= (v.has_key?('adLocked') ? v['adLocked'] : false)
                   pu['placeID']= v['id']
+                  pu['type']= vu['type']
+                  pu['subType']= vu['subType']
                 end
               end
             end
             if pu.has_key?('id')
               begin
-                db.exec_prepared('insere_pu',[pu['id'], pu['createdBy'], pu['name'], Time.at(pu['dateAdded']/1000), pu['longitude'], pu['latitude'], pu['adLocked'], pu['placeID'] ])
+                db.exec_prepared('insere_pu',[pu['id'], pu['createdBy'], pu['name'], Time.at(pu['dateAdded']/1000), pu['longitude'], pu['latitude'], pu['adLocked'], pu['type'], pu['subType'], pu['placeID'] ])
               rescue PG::UniqueViolation
                 puts "#{pu['id']}"
               end

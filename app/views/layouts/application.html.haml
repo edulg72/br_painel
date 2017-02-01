@@ -25,11 +25,21 @@
         .row
           .span12
             = yield
+            %br
+        .row
+          .btn-group.btn-group-justified
+            %a.btn.btn-default.linkbar{:href => 'http://www.waze.com', :target => '_Waze'} Conheça o Waze
+            %a.btn.btn-default.linkbar{:href => 'http://forum.wazebrasil.com', :target => '_forum'} Fórum Brasil
+            %a.btn.btn-default.linkbar{:href => 'http://wiki.waze.com/wiki/brasil', :target => '_wiki'} Wiki
+            %a.btn.btn-default.linkbar{:href => 'http://dashboard.wazebrasil.com', :target => '_dashboard'} Editores Waze Brasil
+            %a.btn.btn-default.linkbar{:href => 'http://segments.edulg.com.br', :target => '_segments'} Painel de Segmentos
     %footer.container
       .row
         .col-sm-0.col-md-3.col-lg-3
           &nbsp;
         .col-sm-12.col-md-6.col-lg-6
-          .text-center (c)2015-2017 edulg72@gmail.com
+          .text-center
+            %i.fa.fa-copyright
+            2015-2017 edulg72@gmail.com
         .col-sm-12.col-md-3.col-lg-3
           %a.text-right{:href => '/options'} Alterar configurações de visualização

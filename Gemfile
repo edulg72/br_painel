@@ -39,6 +39,7 @@ gem 'coffee-rails', '~> 4.0.0'
 # Use Bootstrap
 gem 'bootstrap-sass', '~> 3.3.5'
 gem 'autoprefixer-rails'
+gem 'font-awesome-sass'
 
 # Use jquery as the JavaScript library
 gem 'jquery-rails'
@@ -66,4 +67,3 @@ gem 'haml'
 
 # Use debugger
 # gem 'debugger', group: [:development, :test]
-

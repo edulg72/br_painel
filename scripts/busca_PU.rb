@@ -76,7 +76,8 @@ def busca(db,agent,longOeste,latNorte,longLeste,latSul,passo,exec)
               pu['id']= v['venueUpdateRequests'][0]['id']
               pu['localID']= v['id']
               pu['createdBy']= v['venueUpdateRequests'][0]['createdBy']
-              pu['name']= (v.has_key?('name') ? v['name'] : (v['residential'] ? '[Residencia]' : '[Sem nome]'))
+              #pu['name']= (v.has_key?('name') ? v['name'] : (v['residential'] ? '[Residencia]' : '[Sem nome]'))
+              pu['name']= (v['residential'] ? '[Residencial]' : (v.has_key?('name') ? (v['name'].strip.empty? ? '[Sem nome]' : v['name'] ) : '[Sem nome]'))
               pu['dateAdded']= v['venueUpdateRequests'][0]['dateAdded']
               pu['longitude']= (v['geometry']['type']=='Point'? v['geometry']['coordinates'][0] : v['geometry']['coordinates'][0][0][0])
               pu['latitude']= (v['geometry']['type']=='Point'? v['geometry']['coordinates'][1] : v['geometry']['coordinates'][0][0][1])

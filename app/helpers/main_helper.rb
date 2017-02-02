@@ -16,46 +16,23 @@ def tipo_mp(tipo)
 end
 
 def tipo_pu(tipo,subtipo)
-=begin
-  "update_requests":{
-    "panel":{
-      "flag_title":{
-        "IMAGE":"Foto marcada",
-        "VENUE":"Local marcado"
-      },
-      "title":{
-        "ADD_VENUE":"Novo local",
-        "DELETE_VENUE":"Local removido",
-        "UPDATE_VENUE":"Novas informações para o local",
-        "ADD_IMAGE":"Nova imagem"
-      },
-      "action":{
-        "open":"Aberto",
-        "approve":"Aprovar",
-        "reject":"Recusar",
-        "reject_flag":"Ignorar marcação",
-        "add_to_map":"Adicionar ao mapa",
-        "solved":"Resolvido",
-        "merge":"Mesclar locais",
-        "delete":"Excluir local",
-        "delete_picture":"Excluir imagem"
-      },
-      "place_deleted":"Local excluído",
-      "flag_reason":"Motivo da marcação:"
-    },
-    "flags":{
-      "CLOSED":"Local fechado",
-      "MOVED":"Mudança de endereço",
-      "RESIDENTIAL":"Residencial (casa)",
-      "DUPLICATE":"Duplicado de",
-      "INAPPROPRIATE":"Inapropriado",
-      "WRONG_DETAILS":"Informações erradas",
-      "LOW_QUALITY":"Baixa qualidade",
-      "UNRELATED":"Sem relação",
-      "OTHER":"Outro"
-    }
-  }
-=end
+  tp = case tipo
+  when 'IMAGE' then 'Nova imagem'
+  when 'VENUE' then 'Novo local'
+  when 'REQUEST' then (subtipo == 'UPDATE' ? 'Novas informações para o local' : (subtipo == 'DELETE' ? 'Local removido' : (subtipo == 'FLAG' ? 'Local marcado' : 'Desconhecido')))
+    else 0
+  end
+  return tp
+end
+
+def icone_pu(tipo,subtipo)
+  tp = case tipo
+  when 'IMAGE' then 'fa-picture-o'
+  when 'VENUE' then 'fa-asterisk'
+  when 'REQUEST' then (subtipo == 'UPDATE' ? 'fa-refresh' : (subtipo == 'DELETE' ? 'fa-trash' : (subtipo == 'FLAG' ? 'fa-flag' : 'fa-question')))
+    else 0
+  end
+  return tp
 end
 
 end

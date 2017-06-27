@@ -22,12 +22,24 @@ if [ `ps -ef | grep busca_UR | wc -l` -le "1" ]
     ruby busca_UR.rb $1 $2 -43.2 -8 -34.5 -9 1
 
     #echo "Norte e Nordeste (ate Alagoas)"
-    ruby busca_UR.rb $1 $2 -73.5 -9 -34.5 -11 1
-    ruby busca_UR.rb $1 $2 -72 -11 -36 -12 1
+    ruby busca_UR.rb $1 $2 -73.5 -9 -34.5 -10 1
+
+    # Com Bahia
+    #ruby busca_UR.rb $1 $2 -73.5 -10 -34.5 -11 1
+    #ruby busca_UR.rb $1 $2 -72 -11 -36 -12 1
+    #ruby busca_UR.rb $1 $2 -66 -12 -36 -14 1
+    #ruby busca_UR.rb $1 $2 -61.5 -14 -38.5 -17 1
+
+    # Sem Bahia
+    ruby busca_UR.rb $1 $2 -73.5 -10 -43.7 -11 1
+    ruby busca_UR.rb $1 $2 -38.4 -10 -34.5 -11 1
+    ruby busca_UR.rb $1 $2 -72 -11 -46 -12 1
+    ruby busca_UR.rb $1 $2 -38.2 -11 -36 -12 1
+    ruby busca_UR.rb $1 $2 -66 -12 -46 -14 1
+    ruby busca_UR.rb $1 $2 -61.5 -14 -39.8 -17 1
+    #
 
     #echo "Centro-oeste"
-    ruby busca_UR.rb $1 $2 -66 -12 -36 -14 1
-    ruby busca_UR.rb $1 $2 -61.5 -14 -38.5 -17 1
     ruby busca_UR.rb $1 $2 -58.5 -17 -38.5 -21 1
     ruby busca_UR.rb $1 $2 -58.5 -21 -40.5 -23 0.5
     ruby busca_UR.rb $1 $2 -55.5 -23 -47.5 -26 1

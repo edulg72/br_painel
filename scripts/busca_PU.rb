@@ -52,61 +52,63 @@ def busca(db,agent,longOeste,latNorte,longLeste,latSul,passo,exec)
       area = [lonIni, latIni, lonFim, latFim]
 
       begin
-        wme = agent.get "https://www.waze.com/row-Descartes-live/app/Features?venueLevel=1&venueFilter=3,1,3&problemFilter=3,3&bbox=#{area.join('%2C')}"
+        ['venueLevel=1&venueFilter=1&venueUpdateRequests=true','venueLevel=1&venueFilter=1,1,3'].each do |par|
+          wme = agent.get "https://www.waze.com/row-Descartes-live/app/Features?#{par}&bbox=#{area.join('%2C')}"
 
-        json = JSON.parse(wme.body)
+          json = JSON.parse(wme.body)
 
-        # Coleta os usuários que editaram na área
-        json['users']['objects'].each do |u|
-          if db.exec_params('select * from usuario where id = $1',[u['id']]).ntuples == 0
-            db.exec_prepared('insere_usuario', [u['id'],u['userName'],u['rank']+1])
-          end
-        end
-
-        # Coleta os dados dos PUs na area
-        json['venues']['objects'].each do |v|
-          if v.has_key?('venueUpdateRequests')
-            #puts "#{v}"
-            if db.exec_params('select id from local where id = $1',[v['id']]).ntuples == 0
-              db.exec_prepared('insere_local',[v['id'], v['name'], v['streetID'], (v.has_key?('createdOn') ? Time.at(v['createdOn']/1000) : nil), v['createdBy'], (v.has_key?('updatedOn') ? Time.at(v['updatedOn']/1000) : nil), v['updatedBy'], (v['geometry']['type']=='Point'? v['geometry']['coordinates'][0] : v['geometry']['coordinates'][0][0][0]), (v['geometry']['type']=='Point'? v['geometry']['coordinates'][1] : v['geometry']['coordinates'][0][0][1]), v['lockRank'], v['approved'], (v.has_key?('residential') ? v['residential'] : false), v['categories'][0], (v.has_key?('adLocked') ? v['adLocked'] : false) ])
+          # Coleta os usuários que editaram na área
+          json['users']['objects'].each do |u|
+            if db.exec_params('select * from usuario where id = $1',[u['id']]).ntuples == 0
+              db.exec_prepared('insere_usuario', [u['id'],u['userName'],u['rank']+1])
             end
+          end
 
-            pu = {'dateAdded' => (Time.now.to_i * 1000)}
-            if v.has_key?('adLocked') and v['adLocked']
-              pu['id']= v['venueUpdateRequests'][0]['id']
-              pu['localID']= v['id']
-              pu['createdBy']= v['venueUpdateRequests'][0]['createdBy']
-              #pu['name']= (v.has_key?('name') ? v['name'] : (v['residential'] ? '[Residencia]' : '[Sem nome]'))
-              pu['name']= (v['residential'] ? '[Residencial]' : (v.has_key?('name') ? (v['name'].strip.empty? ? '[Sem nome]' : v['name'] ) : '[Sem nome]'))
-              pu['dateAdded']= v['venueUpdateRequests'][0]['dateAdded']
-              pu['longitude']= (v['geometry']['type']=='Point'? v['geometry']['coordinates'][0] : v['geometry']['coordinates'][0][0][0])
-              pu['latitude']= (v['geometry']['type']=='Point'? v['geometry']['coordinates'][1] : v['geometry']['coordinates'][0][0][1])
-              pu['adLocked']= true
-              pu['placeID']= v['id']
-              pu['type']= v['venueUpdateRequests'][0]['type']
-              pu['subType']= v['venueUpdateRequests'][0]['subType']
-            else
-              v['venueUpdateRequests'].each do |vu|
-                if vu.has_key?('dateAdded') and vu['dateAdded'] < pu['dateAdded']
-                  pu['id']= v['id']
-                  pu['localID']= v['id']
-                  pu['createdBy']= vu['createdBy']
-                  pu['name']= (v.has_key?('name') ? v['name'] : (v['residential'] ? '[Residencia]' : '[Sem nome]'))
-                  pu['dateAdded']= vu['dateAdded']
-                  pu['longitude']= (v['geometry']['type']=='Point'? v['geometry']['coordinates'][0] : v['geometry']['coordinates'][0][0][0])
-                  pu['latitude']= (v['geometry']['type']=='Point'? v['geometry']['coordinates'][1] : v['geometry']['coordinates'][0][0][1])
-                  pu['adLocked']= (v.has_key?('adLocked') ? v['adLocked'] : false)
-                  pu['placeID']= v['id']
-                  pu['type']= vu['type']
-                  pu['subType']= vu['subType']
+          # Coleta os dados dos PUs na area
+          json['venues']['objects'].each do |v|
+            if v.has_key?('venueUpdateRequests')
+              #puts "#{v}"
+              if db.exec_params('select id from local where id = $1',[v['id']]).ntuples == 0
+                db.exec_prepared('insere_local',[v['id'], v['name'], v['streetID'], (v.has_key?('createdOn') ? Time.at(v['createdOn']/1000) : nil), v['createdBy'], (v.has_key?('updatedOn') ? Time.at(v['updatedOn']/1000) : nil), v['updatedBy'], (v['geometry']['type']=='Point'? v['geometry']['coordinates'][0] : v['geometry']['coordinates'][0][0][0]), (v['geometry']['type']=='Point'? v['geometry']['coordinates'][1] : v['geometry']['coordinates'][0][0][1]), v['lockRank'], v['approved'], (v.has_key?('residential') ? v['residential'] : false), v['categories'][0], (v.has_key?('adLocked') ? v['adLocked'] : false) ])
+              end
+
+              pu = {'dateAdded' => (Time.now.to_i * 1000)}
+              if v.has_key?('adLocked') and v['adLocked']
+                pu['id']= v['venueUpdateRequests'][0]['id']
+                pu['localID']= v['id']
+                pu['createdBy']= v['venueUpdateRequests'][0]['createdBy']
+                #pu['name']= (v.has_key?('name') ? v['name'] : (v['residential'] ? '[Residencia]' : '[Sem nome]'))
+                pu['name']= (v['residential'] ? '[Residencial]' : (v.has_key?('name') ? (v['name'].strip.empty? ? '[Sem nome]' : v['name'] ) : '[Sem nome]'))
+                pu['dateAdded']= v['venueUpdateRequests'][0]['dateAdded']
+                pu['longitude']= (v['geometry']['type']=='Point'? v['geometry']['coordinates'][0] : v['geometry']['coordinates'][0][0][0])
+                pu['latitude']= (v['geometry']['type']=='Point'? v['geometry']['coordinates'][1] : v['geometry']['coordinates'][0][0][1])
+                pu['adLocked']= true
+                pu['placeID']= v['id']
+                pu['type']= v['venueUpdateRequests'][0]['type']
+                pu['subType']= v['venueUpdateRequests'][0]['subType']
+              else
+                v['venueUpdateRequests'].each do |vu|
+                  if vu.has_key?('dateAdded') and vu['dateAdded'] < pu['dateAdded']
+                    pu['id']= v['id']
+                    pu['localID']= v['id']
+                    pu['createdBy']= vu['createdBy']
+                    pu['name']= (v.has_key?('name') ? v['name'] : (v['residential'] ? '[Residencia]' : '[Sem nome]'))
+                    pu['dateAdded']= vu['dateAdded']
+                    pu['longitude']= (v['geometry']['type']=='Point'? v['geometry']['coordinates'][0] : v['geometry']['coordinates'][0][0][0])
+                    pu['latitude']= (v['geometry']['type']=='Point'? v['geometry']['coordinates'][1] : v['geometry']['coordinates'][0][0][1])
+                    pu['adLocked']= (v.has_key?('adLocked') ? v['adLocked'] : false)
+                    pu['placeID']= v['id']
+                    pu['type']= vu['type']
+                    pu['subType']= vu['subType']
+                  end
                 end
               end
-            end
-            if pu.has_key?('id')
-              begin
-                db.exec_prepared('insere_pu',[pu['id'], pu['createdBy'], pu['name'], Time.at(pu['dateAdded']/1000), pu['longitude'], pu['latitude'], pu['adLocked'], pu['type'], pu['subType'], pu['placeID'] ])
-              rescue PG::UniqueViolation
-                puts "#{pu['id']}"
+              if pu.has_key?('id')
+                begin
+                  db.exec_prepared('insere_pu',[pu['id'], pu['createdBy'], pu['name'], Time.at(pu['dateAdded']/1000), pu['longitude'], pu['latitude'], pu['adLocked'], pu['type'], pu['subType'], pu['placeID'] ])
+                rescue PG::UniqueViolation
+                  puts "#{pu['id']}"
+                end
               end
             end
           end
@@ -122,7 +124,6 @@ def busca(db,agent,longOeste,latNorte,longLeste,latSul,passo,exec)
         # Erro no corpo do pacote - precisa ser investigada a razao deste erro
         puts "Erro JSON em #{area}"
       end
-
       latIni = latFim
     end
     lonIni = lonFim

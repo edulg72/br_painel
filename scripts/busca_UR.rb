@@ -26,6 +26,7 @@ LatNorte = ARGV[3].to_f
 LongLeste = ARGV[4].to_f
 LatSul = ARGV[5].to_f
 Passo = ARGV[6].to_f
+@requests = 0
 
 agent = Mechanize.new
 count = 0
@@ -64,6 +65,7 @@ def busca(db,agent,longOeste,latNorte,longLeste,latSul,passo,exec)
 
       begin
         wme = agent.get "https://www.waze.com/row-Descartes-live/app/Features?mapUpdateRequestFilter=1&problemFilter=0&bbox=#{area.join('%2C')}"
+        @requests += 1
 
         json = JSON.parse(wme.body)
 
@@ -102,6 +104,7 @@ def busca(db,agent,longOeste,latNorte,longLeste,latSul,passo,exec)
         # Busca todas as informacoes sobre as URs encontradas
         if urs_area.size > 0
           ur = JSON.parse(agent.get("https://www.waze.com/row-Descartes-live/app/MapProblems/UpdateRequests?ids=#{urs_area.join('%2C')}").body)
+          @requests += 1
 
           ur['updateRequestSessions']['objects'].each do |u|
             begin
@@ -134,3 +137,4 @@ def busca(db,agent,longOeste,latNorte,longLeste,latSul,passo,exec)
 end
 
 busca(db,agent,LongOeste,LatNorte,LongLeste,LatSul,Passo,1)
+puts @requests

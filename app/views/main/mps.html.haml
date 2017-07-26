@@ -1,9 +1,20 @@
 - cache [@mps.size, @atu_mp.data, cookies[:wme_url], cookies[:wme_language],'mps'] do
   %h3.text-center
     = t('mps')
-    .row
-      .col-sm-3.col-sm-offset-3.col-md-3.col-md-offset-9.col-lg-3.col-lg-offset-9
-        %span.text-right.small= "#{t('updated-at')} #{@atu_mp.data.strftime('%d/%m/%Y %H:%M')}"
+  .row
+    .col-sm-3.col-sm-offset-3.col-md-3.col-md-offset-9.col-lg-3.col-lg-offset-9
+      %span.text-right.small= "#{t('updated-at')} #{@atu_mp.data.strftime('%d/%m/%Y %H:%M')}"
+  - @estados.order('nm_estado').each do |estado|
+    - if estado.mps.count > 0
+      .row
+        .panel.panel-default
+          .panel-heading
+            = estado.nm_estado
+          .panel-body
+            - estado.mps.abertas.order("peso desc").each do |m|
+              %a.btn.btn-sm{ 'style' => "margin-top: 5px;", :class => "#{m.peso < 4 ? 'btn-success' : (m.peso < 8 ? 'btn-warning' : 'btn-danger')}", :href => "#{cookies[:wme_url].nil? ? 'https://www.waze.com/' : cookies[:wme_url]}#{cookies[:wme_language].nil? ? 'pt-BR/' : cookies[:wme_language]}editor/?zoom=5\&lat=#{m.latitude}\&lon=#{m.longitude}\&mapProblem=#{m.id}", 'data-toggle' => 'tooltip', 'data-placement' => 'top', 'title' => "#{tipo_mp(m.tipo)}", :target => "WME"}= m.id
+
+  -#
     .row
       - @mps.abertas.order("peso desc").each do |m|
         %a.btn.btn-sm{ 'style' => "margin-top: 5px;", :class => "#{m.peso < 4 ? 'btn-success' : (m.peso < 8 ? 'btn-warning' : 'btn-danger')}", :href => "#{cookies[:wme_url].nil? ? 'https://www.waze.com/' : cookies[:wme_url]}#{cookies[:wme_language].nil? ? 'pt-BR/' : cookies[:wme_language]}editor/?zoom=5\&lat=#{m.latitude}\&lon=#{m.longitude}\&mapProblem=#{m.id}", 'data-toggle' => 'tooltip', 'data-placement' => 'top', 'title' => "#{tipo_mp(m.tipo)}", :target => "WME"}= m.id

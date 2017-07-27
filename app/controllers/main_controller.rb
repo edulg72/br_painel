@@ -44,6 +44,7 @@ class MainController < ApplicationController
 
   def pendentes
     @places = PU.nacional.editaveis
+    @estados = Estado.all
     @atu_pu = Atualizacao.find('pu')
     @nav = [{t('unapproved-places') => "#"},{ t('nav-first-page') => '/'}]
   end

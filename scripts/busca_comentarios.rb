@@ -77,7 +77,7 @@ def busca(db,agent,longOeste,latNorte,longLeste,latSul,passo,exec)
             geom = "SRID=4674;POLYGON((#{nodes.join(',')}))"
           end
           @comments[c['id']] = "\"#{c['id']}\",\"#{c['subject'].gsub(/"/,'""')}\",\"#{c['body'].gsub(/"/,'""')}\",#{c['lockRank'].nil? ? 0 : c['lockRank']+1},#{c['createdBy']},#{Time.at(c['createdOn']/1000)},#{c['updatedBy'].nil? ? c['createdBy'] : c['updatedBy']},#{c['updatedOn'].nil? ? Time.at(c['createdOn']/1000) : Time.at(c['updatedOn']/1000)},\"#{geom}\"\n" if not @comments.has_key?(c['id'])
-          if not c['conversation'].nil?
+          if c.has_key?('conversation')
             c['conversation'].each {|cc| @conversations << "\"#{c['id']}\",#{Time.at(cc['createdOn']/1000)},\"#{cc['text']}\",#{cc['userID']}\n"}
           end
         end

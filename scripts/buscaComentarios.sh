@@ -57,6 +57,7 @@ if [ `ps -ef | grep busca_comentarios | wc -l` -le "1" ]
 
     psql -h $POSTGRESQL_DB_HOST -d br_painel -U $POSTGRESQL_DB_USERNAME -c 'update comments set city_id = (select cd_geocmu from municipios where ST_Contains(geom, ST_Centroid(comments.geom))) where city_id is null;'
     psql -h $POSTGRESQL_DB_HOST -d br_painel -U $POSTGRESQL_DB_USERNAME -c 'refresh materialized view vw_comments;'
+    psql -h $POSTGRESQL_DB_HOST -d br_painel -U $POSTGRESQL_DB_USERNAME -c 'refresh materialized view vw_conversations;'
     psql -h $POSTGRESQL_DB_HOST -d br_painel -U $POSTGRESQL_DB_USERNAME -c "update atualizacao set data = current_timestamp where objeto = 'comments';"
     psql -h $POSTGRESQL_DB_HOST -d br_painel -U $POSTGRESQL_DB_USERNAME -c 'vacuum analyze;'
     echo "Final de execucao: $(date '+%d/%m/%Y %H:%M:%S')"

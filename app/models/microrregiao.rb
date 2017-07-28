@@ -7,5 +7,6 @@ class Microrregiao < ActiveRecord::Base
   has_many :urs, through: :municipios
   has_many :mps, through: :municipios
   has_many :pus, through: :municipios
+  has_many :comentarios, through: :municipios
   has_many :segmentos, through: :municipios
 end

@@ -25,6 +25,7 @@ pt:
   city: "Cidade"
   comment: "comentário"
   comments: "comentários"
+  Comments: "Comentários"
   date: "Data"
   editor: "Editor"
   last-comment: "Último comentário"

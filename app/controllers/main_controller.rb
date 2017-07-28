@@ -56,6 +56,13 @@ class MainController < ApplicationController
     @nav = [{t('mps') => "#"},{ t('nav-first-page') => '/'}]
   end
 
+  def comentarios
+    @comentarios = Comentario.all
+    @estados = Estado.all
+    @atu_com = Atualizacao.find('comments')
+    @nav = [{t('Comments') => "#"},{ t('nav-first-page') => '/'}]
+  end
+
   def options
     @wme_url = (cookies[:wme_url].nil? ? 'https://www.waze.com/' : cookies[:wme_url])
     @wme_language = (cookies[:wme_language].nil? ? 'pt-BR/' : cookies[:wme_language])

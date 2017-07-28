@@ -1,0 +1,40 @@
+- cache [@comentarios.size, @atu_com.data, cookies[:wme_url], cookies[:wme_language],'comentarios'] do
+  %h3.text-center
+    = t('Comments')
+  .row
+    .col-sm-3.col-sm-offset-3.col-md-3.col-md-offset-9.col-lg-3.col-lg-offset-9
+      %span.text-right.small= "#{t('updated-at')} #{@atu_com.data.strftime('%d/%m/%Y %H:%M')}"
+  #accordion.panel-group{:role => "tablist", 'aria-multiselecttable' => "true"}
+    - @estados.order('nm_estado').each do |estado|
+      - if estado.comentarios.nacional.count > 0
+        .row
+          .panel.panel-info
+            .panel-heading{:id => "#{estado.sigla}", :role => "tab"}
+              %h4.panel-title
+                %a{:role => "button", 'data-toggle' => "collapse", 'data-parent' => "#accordion", :href => "##{estado.sigla}-body", 'aria-expanded' => "true", 'aria-controls' => "#{estado.sigla}-body"}
+                  = estado.nm_estado
+                  %span.badge= estado.comentarios.nacional.count
+            .panel-collapse.collapse{:id => "#{estado.sigla}-body", :role => "tabpanel", 'arialabelledby' => "#{estado.sigla}"}
+              .panel-body
+                - estado.comentarios.nacional.order("created_on desc").each do |c|
+                  .col-sm-12.col-md-6.col-lg-4{:style => "margin-bottom: 1em;"}
+                    .panel.panel-default
+                      .panel-heading
+                        %a{ 'style' => "margin-top: 5px;", :href => "#{cookies[:wme_url].nil? ? 'https://www.waze.com/' : cookies[:wme_url]}#{cookies[:wme_language].nil? ? 'pt-BR/' : cookies[:wme_language]}editor/?zoom=5\&lat=#{c.latitude}\&lon=#{c.longitude}\&mapComments=#{c.id}", :target => "WME"}= c.subject
+                      .panel-body
+                        != c.body.gsub(/\n/,'<br />')
+                        %h6.text-muted
+                          = "Criado por #{c.criador.username}(#{c.criador.rank}) em #{c.created_on.strftime('%d/%m/%Y %H:%M')}"
+                          - if not c.atualizador.nil?
+                            %br
+                            .text-muted= "Atualizado por #{c.atualizador.username}(#{c.atualizador.rank}) em #{c.updated_on.strftime('%d/%m/%Y %H:%M')}"
+                      - if c.conversas.count > 0
+                        %ul.list-group
+                          - c.conversas.order('created_on').each do |s|
+                            %li.list-group-item
+                              %h6.text-muted
+                                %strong
+                                  = s.editor.username
+                                  = "(#{s.editor.rank})"
+                                = s.created_on.strftime('%d/%m/%Y %H:%M')
+                              != s.text.gsub(/\n/,'<br />')

@@ -7,7 +7,7 @@
   #accordion.panel-group{:role => "tablist", 'aria-multiselecttable' => "true"}
     - @estados.order('nm_estado').each do |estado|
       - if estado.comentarios.nacional.count > 0
-        .row
+        .row{:style => "margin-bottom: 0.5em;"}
           .panel.panel-info
             .panel-heading{:id => "#{estado.sigla}", :role => "tab"}
               %h4.panel-title

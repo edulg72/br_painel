@@ -5,6 +5,7 @@ cd /home/rails/br_painel/scripts/
 if [ `ps -ef | grep busca_comentarios | wc -l` -le "1" ]
   then
     echo "Inicio: $(date '+%d/%m/%Y %H:%M:%S')"
+    psql -h $POSTGRESQL_DB_HOST -d br_painel -U $POSTGRESQL_DB_USERNAME -c 'delete from comments; delete from comments_conversation;'
     #echo "Regiao Norte"
     ruby busca_comentarios.rb $1 $2 -66 5.3 -59 3 1
     ruby busca_comentarios.rb $1 $2 -52.5 5 -50 3 1

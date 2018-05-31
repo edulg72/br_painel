@@ -59,7 +59,7 @@ def busca(db,agent,longOeste,latNorte,longLeste,latSul,passo,exec)
       area = [lonIni, latIni, lonFim, latFim]
 
       begin
-        wme = agent.get "https://www.waze.com/row-Descartes-live/app/Features?mapComments=true&bbox=#{area.join('%2C')}"
+        wme = agent.get "https://www.waze.com/row-Descartes-live/app/Features?mapComments=true&bbox=#{area.join('%2C')}&sandbox=true"
         @requests += 1
 
         json = JSON.parse(wme.body)

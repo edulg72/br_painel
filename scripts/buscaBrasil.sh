@@ -2,7 +2,7 @@
 
 cd /home/rails/br_painel/scripts/
 
-if [ `ps -ef | grep busca[B]rasil | wc -l` -le "1" ]
+if [ `ps -ef | grep buscaBrasil | wc -l` -le "1" ]
   then
     echo "Inicio: $(date '+%d/%m/%Y %H:%M:%S')"
     psql -h $POSTGRESQL_DB_HOST -d br_painel -U $POSTGRESQL_DB_USERNAME -c "delete from ur; delete from mp;"

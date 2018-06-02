@@ -116,7 +116,7 @@ def busca(db,agent,longOeste,latNorte,longLeste,latSul,passo,exec)
         end
       rescue Mechanize::ResponseCodeError
         # Caso o problema tenha sido no tamanho do pacote de resposta, divide a area em 4 pedidos menores (limitado a 3 reducoes)
-        if exec < 3
+        if exec < 2
           busca(db,agent,area[0],area[1],area[2],area[3],(passo/2),(exec+1))
         else
           puts "[#{Time.now.strftime('%d/%m/%Y %H:%M:%S')}] - ResponseCodeError em #{area}"

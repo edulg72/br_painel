@@ -29,18 +29,18 @@ Passo = ARGV[6].to_f
 @requests = 0
 
 agent = Mechanize.new
-count = 0
-while agent.cookie_jar.jar.empty?
-  begin
-    page = agent.get "https://www.waze.com/row-Descartes-live/app/Session"
-  rescue Mechanize::ResponseCodeError
-    csrf_token = agent.cookie_jar.jar['www.waze.com']['/']['_csrf_token'].value if agent.cookie_jar.jar.size > 0
-    sleep (2 * (count + 1))
-  end
-  count += 1
-end
-puts "Tentativas: #{count}"
-login = agent.post('https://www.waze.com/login/create', {"user_id" => USER, "password" => PASS}, {"X-CSRF-Token" => csrf_token})
+#count = 0
+#while agent.cookie_jar.jar.empty?
+#  begin
+#    page = agent.get "https://www.waze.com/row-Descartes-live/app/Session"
+#  rescue Mechanize::ResponseCodeError
+#    csrf_token = agent.cookie_jar.jar['www.waze.com']['/']['_csrf_token'].value if agent.cookie_jar.jar.size > 0
+#    sleep (2 * (count + 1))
+#  end
+#  count += 1
+#end
+#puts "Tentativas: #{count}"
+#login = agent.post('https://www.waze.com/login/create', {"user_id" => USER, "password" => PASS}, {"X-CSRF-Token" => csrf_token})
 
 db = PG::Connection.new(:hostaddr => ENV['POSTGRESQL_DB_HOST'], :dbname => 'br_painel', :user => ENV['POSTGRESQL_DB_USERNAME'], :password => ENV['POSTGRESQL_DB_PASSWORD'])
 db.prepare('insere_usuario','insert into usuario (id, username, rank) values ($1,$2,$3)')
@@ -64,6 +64,7 @@ def busca(db,agent,longOeste,latNorte,longLeste,latSul,passo,exec)
       area = [lonIni, latIni, lonFim, latFim]
 
       begin
+        agent.cookie_jar.clear!
         wme = agent.get "https://www.waze.com/row-Descartes-live/app/Features?mapUpdateRequestFilter=1&problemFilter=0&bbox=#{area.join('%2C')}&sandbox=true"
         @requests += 1
 
@@ -103,6 +104,7 @@ def busca(db,agent,longOeste,latNorte,longLeste,latSul,passo,exec)
 
         # Busca todas as informacoes sobre as URs encontradas
         if urs_area.size > 0
+          agent.cookie_jar.clear!
           ur = JSON.parse(agent.get("https://www.waze.com/row-Descartes-live/app/MapProblems/UpdateRequests?ids=#{urs_area.join('%2C')}&sandbox=true").body)
           @requests += 1
 
@@ -130,7 +132,7 @@ def busca(db,agent,longOeste,latNorte,longLeste,latSul,passo,exec)
       end
 
       latIni = latFim
-      sleep 2
+      #sleep 2
     end
     lonIni = lonFim
   end

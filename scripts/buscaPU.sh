@@ -1,7 +1,7 @@
 #!/bin/bash
 
-if [ `ps -ef | grep buscaPU | wc -l` -le "1" ]
-  then
+#if [ `ps -ef | grep buscaPU | wc -l` -le "1" ]
+#  then
     cd $HOME/br_painel/scripts/
 
     echo "Inicio: $(date '+%d/%m/%Y %H:%M:%S')"
@@ -62,6 +62,6 @@ if [ `ps -ef | grep buscaPU | wc -l` -le "1" ]
     psql -h $POSTGRESQL_DB_HOST -d br_painel -U $POSTGRESQL_DB_USERNAME -c 'vacuum analyze;'
 
     echo "Final de execucao: $(date '+%d/%m/%Y %H:%M:%S')"
-  else
-    echo "[$(date '+%d/%m/%Y %H:%M:%S')] Já existe um script em execução"
-fi
+#  else
+#    echo "[$(date '+%d/%m/%Y %H:%M:%S')] Já existe um script em execução"
+#fi

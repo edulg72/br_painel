@@ -2,8 +2,8 @@
 
 cd /home/rails/br_painel/scripts/
 
-if [ `ps -ef | grep buscaBrasil | wc -l` -le "1" ]
-  then
+#if [ `ps -ef | grep buscaBrasil | wc -l` -le "1" ]
+#  then
     echo "Inicio: $(date '+%d/%m/%Y %H:%M:%S')"
     psql -h $POSTGRESQL_DB_HOST -d br_painel -U $POSTGRESQL_DB_USERNAME -c "delete from ur; delete from mp;"
     #echo "Regiao Norte"
@@ -65,6 +65,6 @@ if [ `ps -ef | grep buscaBrasil | wc -l` -le "1" ]
     psql -h $POSTGRESQL_DB_HOST -d br_painel -U $POSTGRESQL_DB_USERNAME -c "update atualizacao set data = current_timestamp where objeto = 'ur';"
     psql -h $POSTGRESQL_DB_HOST -d br_painel -U $POSTGRESQL_DB_USERNAME -c 'vacuum analyze;'
     echo "Final de execucao: $(date '+%d/%m/%Y %H:%M:%S')"
-else
-    echo "[$(date '+%d/%m/%Y %H:%M:%S')] Já existe um script em execução"
-fi
+#else
+#    echo "[$(date '+%d/%m/%Y %H:%M:%S')] Já existe um script em execução"
+#fi

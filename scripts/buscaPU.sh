@@ -1,6 +1,6 @@
 #!/bin/bash
 
-if [ `ps -ef | grep buscaPU | wc -l` -le "1" ]
+if [ `ps -ef | grep buscaP[U] | wc -l` -le "1" ]
   then
     cd $HOME/br_painel/scripts/
 

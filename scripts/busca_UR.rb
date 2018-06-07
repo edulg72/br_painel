@@ -98,30 +98,32 @@ def busca(db,agent,longOeste,latNorte,longLeste,latSul,passo,exec)
         # Coleta os IDs de todas as URs na area
         json['mapUpdateRequests']['objects'].each do |u|
         #  puts "#{u}"
-          urs_area << u['id']
+          #urs_area << u['id']
           db.exec_prepared('insere_ur', [u['id'], u['geometry']['coordinates'][0], u['geometry']['coordinates'][1], u['resolvedBy'], (u['resolvedOn'].nil? ? nil : Time.at(u['resolvedOn']/1000)), Time.at(u['driveDate']/1000), u['resolution'], u['type'] ] )
+          # Enquanto a busca estiver em modo sandbox, nao ha como buscar os comentarios e a atualizacao sera aqui
+          db.exec_prepared('update_ur', [(u.has_key?('updatedOn') ? (u['updatedOn'].nil? ? 0 : 1) : 0 ),(u.has_key?('updatedOn') ? '-' : nil), (u.has_key?('updatedOn') ? (u['updatedOn'].nil? ? nil : Time.at(u['updatedOn']/1000)) : nil), (u.has_key?('updatedBy') ? u['updatedBy'] : nil), (u.has_key?('updatedOn') ? (u['updatedOn'].nil? ? nil : Time.at(u['updatedOn']/1000)) : nil), u['id']] )
         end
 
-        # Busca todas as informacoes sobre as URs encontradas
-        if urs_area.size > 0
-          agent.cookie_jar.clear!
-          ur = JSON.parse(agent.get("https://www.waze.com/row-Descartes-live/app/MapProblems/UpdateRequests?ids=#{urs_area.join('%2C')}&sandbox=true").body)
-          @requests += 1
-
-          ur['updateRequestSessions']['objects'].each do |u|
-            begin
-              db.exec_prepared('update_ur', [(u.has_key?('comments') and u['comments'].size > 0 ? u['comments'].size : 0 ),(u.has_key?('comments') and u['comments'].size > 0 ? u['comments'][-1]['text'].gsub('"',"'") : nil), (u.has_key?('comments') and u['comments'].size > 0 ? Time.at(u['comments'][-1]['createdOn']/1000) : nil), (u.has_key?('comments') and u['comments'].size > 0 ? u['comments'][-1]['userID'] : nil), u['id']] )
-            rescue NoMethodError
-              puts "#{u}"
-              exit
-            end
-          end
-        end
+#        # Busca todas as informacoes sobre as URs encontradas
+#        if urs_area.size > 0
+#          agent.cookie_jar.clear!
+#          ur = JSON.parse(agent.get("https://www.waze.com/row-Descartes-live/app/MapProblems/UpdateRequests?ids=#{urs_area.join('%2C')}&sandbox=true").body)
+#          @requests += 1
+#
+#          ur['updateRequestSessions']['objects'].each do |u|
+#            begin
+#              db.exec_prepared('update_ur', [(u.has_key?('comments') and u['comments'].size > 0 ? u['comments'].size : 0 ),(u.has_key?('comments') and u['comments'].size > 0 ? u['comments'][-1]['text'].gsub('"',"'") : nil), (u.has_key?('comments') and u['comments'].size > 0 ? Time.at(u['comments'][-1]['createdOn']/1000) : nil), (u.has_key?('comments') and u['comments'].size > 0 ? u['comments'][-1]['userID'] : nil), u['id']] )
+#            rescue NoMethodError
+#              puts "#{u}"
+#              exit
+#            end
+#          end
+#        end
 
       # Trata eventuais erros de conexao
       rescue Mechanize::ResponseCodeError
         # Caso o problema tenha sido no tamanho do pacote de resposta, divide a area em 4 pedidos menores (limitado a 3 reducoes)
-        if exec < 2
+        if exec < 3
           busca(db,agent,area[0],area[1],area[2],area[3],(passo/2),(exec+1))
         else
           puts "[#{Time.now.strftime('%d/%m/%Y %H:%M:%S')}] - ResponseCodeError em #{area}"

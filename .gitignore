@@ -17,3 +17,4 @@
 
 # Ignore Openshift old config
 /.openshift
+.DS_Store

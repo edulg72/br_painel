@@ -101,7 +101,7 @@ def busca(db,agent,longOeste,latNorte,longLeste,latSul,passo,exec)
           #urs_area << u['id']
           db.exec_prepared('insere_ur', [u['id'], u['geometry']['coordinates'][0], u['geometry']['coordinates'][1], u['resolvedBy'], (u['resolvedOn'].nil? ? nil : Time.at(u['resolvedOn']/1000)), Time.at(u['driveDate']/1000), u['resolution'], u['type'] ] )
           # Enquanto a busca estiver em modo sandbox, nao ha como buscar os comentarios e a atualizacao sera aqui
-          db.exec_prepared('update_ur', [(u.has_key?('updatedOn') ? (u['updatedOn'].nil? ? 0 : 1) : 0 ),(u.has_key?('updatedOn') ? '-' : nil), (u.has_key?('updatedOn') ? (u['updatedOn'].nil? ? nil : Time.at(u['updatedOn']/1000)) : nil), (u.has_key?('updatedBy') ? u['updatedBy'] : nil), (u.has_key?('updatedOn') ? (u['updatedOn'].nil? ? nil : Time.at(u['updatedOn']/1000)) : nil), u['id']] )
+          db.exec_prepared('update_ur', [(u.has_key?('updatedOn') ? (u['updatedOn'].nil? ? 0 : 1) : 0 ),(u.has_key?('updatedOn') ? '-' : nil), (u.has_key?('updatedOn') ? (u['updatedOn'].nil? ? nil : Time.at(u['updatedOn']/1000)) : nil), (u.has_key?('updatedBy') ? u['updatedBy'] : nil), u['id']] )
         end
 
 #        # Busca todas as informacoes sobre as URs encontradas

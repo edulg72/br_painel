@@ -29,6 +29,7 @@ Passo = ARGV[6].to_f
 @requests = 0
 
 agent = Mechanize.new
+agent.user_agent_alias = 'Mac Safari'
 #count = 0
 #while agent.cookie_jar.jar.empty?
 #  begin

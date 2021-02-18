@@ -3,8 +3,6 @@ source 'https://rubygems.org'
 # Ruby 2.5.7
 gem 'rails', '~> 5.2.4'
 
-# gem 'activesupport', '5.1.7'
-
 gem 'listen'
 gem 'bootsnap'
 # Support for databases and environment.
@@ -26,8 +24,6 @@ group :production, :postgresql do
   gem 'pg'
 end
 
-### / OpenShift changes
-
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 5.0'
 # Use Uglifier as compressor for JavaScript assets
@@ -37,7 +33,7 @@ gem 'coffee-rails', '~> 4.2'
 # See https://github.com/sstephenson/execjs#readme for more supported runtimes
 # gem 'therubyracer',  platforms: :ruby
 # Use Bootstrap
-gem 'bootstrap-sass', '~> 3.3.5'
+gem 'bootstrap-sass', '~> 3'
 gem 'autoprefixer-rails'
 gem 'font-awesome-sass'
 
@@ -48,7 +44,7 @@ gem 'turbolinks'
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 gem 'jbuilder', '~> 2'
 # bundle exec rake doc:rails generates the API under doc/api.
-gem 'sdoc', '~> 0.4.0',          group: :doc
+gem 'sdoc', '~> 2.0',          group: :doc
 
 # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
 gem 'spring',        group: :development

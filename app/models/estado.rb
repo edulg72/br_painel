@@ -1,4 +1,4 @@
-class Estado < ActiveRecord::Base
+class Estado < ApplicationRecord
   self.table_name = 'estados'
   self.primary_key = 'cd_geocuf'
 

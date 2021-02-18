@@ -1,4 +1,4 @@
-class Cidade < ActiveRecord::Base
+class Cidade < ApplicationRecord
   self.table_name = 'vw_cidades'
   self.primary_key = 'id'
 

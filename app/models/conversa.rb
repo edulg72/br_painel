@@ -1,4 +1,4 @@
-class Conversa < ActiveRecord::Base
+class Conversa < ApplicationRecord
   self.table_name = 'vw_conversations'
 
   belongs_to :comentario, foreign_key: 'comment_id', class_name: 'Comentario'

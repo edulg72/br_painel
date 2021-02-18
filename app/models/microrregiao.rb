@@ -1,4 +1,4 @@
-class Microrregiao < ActiveRecord::Base
+class Microrregiao < ApplicationRecord
   self.table_name = 'microrregioes'
   self.primary_key = 'cd_geocmi'
 

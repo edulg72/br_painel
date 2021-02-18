@@ -1,4 +1,4 @@
-class UR < ActiveRecord::Base
+class UR < ApplicationRecord
   self.table_name = 'vw_ur'
   self.primary_key = 'id'
 

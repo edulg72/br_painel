@@ -1,8 +1,8 @@
-class Edicao < ActiveRecord::Base
+class Edicao < ApplicationRecord
   self.table_name = 'vw_edicoes'
   self.inheritance_column = 'inherit'
 
-  belongs_to :editor, foreign_key: :user_id, class_name: 'Editor' 
+  belongs_to :editor, foreign_key: :user_id, class_name: 'Editor'
   belongs_to :municipio, foreign_key: :municipioid, class_name: 'Municipio'
 
   def url

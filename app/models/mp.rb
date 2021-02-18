@@ -1,4 +1,4 @@
-class MP < ActiveRecord::Base
+class MP < ApplicationRecord
   self.table_name = 'vw_mp'
 
   belongs_to :operador, foreign_key: 'resolvida_por', class_name: 'Editor'

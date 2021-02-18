@@ -1,4 +1,4 @@
-class EstadoWaze < ActiveRecord::Base
+class EstadoWaze < ApplicationRecord
   self.table_name = 'estados_waze'
   self.primary_key = 'id'
 

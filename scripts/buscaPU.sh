@@ -8,6 +8,7 @@
 
     psql -h $POSTGRESQL_DB_HOST -d br_painel -U $POSTGRESQL_DB_USERNAME -c 'delete from pu;'
     psql -h $POSTGRESQL_DB_HOST -d br_painel -U $POSTGRESQL_DB_USERNAME -c 'delete from local;'
+    #psql -h $POSTGRESQL_DB_HOST -d br_painel -U $POSTGRESQL_DB_USERNAME -c 'delete from cameras;'
 
     ruby busca_PU.rb $1 $2 -61.5 6 -59 5 1
     ruby busca_PU.rb $1 $2 -66 5 -59 3 1

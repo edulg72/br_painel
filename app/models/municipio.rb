@@ -1,4 +1,4 @@
-class Municipio < ActiveRecord::Base
+class Municipio < ApplicationRecord
   self.table_name = 'municipios'
   self.primary_key = 'cd_geocmu'
 

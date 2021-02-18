@@ -1,4 +1,4 @@
-class PU < ActiveRecord::Base
+class PU < ApplicationRecord
   self.table_name = 'vw_pu'
 
   belongs_to :municipio, foreign_key: 'municipioid'

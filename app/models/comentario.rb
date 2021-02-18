@@ -1,4 +1,4 @@
-class Comentario < ActiveRecord::Base
+class Comentario < ApplicationRecord
   self.table_name = 'vw_comments'
   self.primary_key = 'id'
 

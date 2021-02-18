@@ -1,4 +1,4 @@
-class Regiao < ActiveRecord::Base
+class Regiao < ApplicationRecord
   self.table_name = 'regioes'
   self.primary_key = 'cd_geocme'
 

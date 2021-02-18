@@ -80,19 +80,23 @@
     .row
       .col-sm-3.col-sm-offset-3.col-md-3.col-md-offset-9.col-lg-3.col-lg-offset-9
         %span.text-right.small= "#{t('updated-at')} #{@atu_ur.data.strftime('%d/%m/%Y %H:%M')}"
-    .row
-      - area.mps.abertas.order("peso desc").each do |m|
-        %a.btn.btn-sm{ 'style' => "margin-top: 5px;", :class => "#{m.peso < 4 ? 'btn-success' : (m.peso < 8 ? 'btn-warning' : 'btn-danger')}", :href => "#{cookies[:wme_url].nil? ? 'https://www.waze.com/' : cookies[:wme_url]}#{cookies[:wme_language].nil? ? 'pt-BR/' : cookies[:wme_language]}editor/?zoom=5\&lat=#{m.latitude}\&lon=#{m.longitude}\&mapProblem=#{m.id}", 'data-toggle' => 'tooltip', 'data-placement' => 'top', 'title' => "#{tipo_mp(m.tipo)}", :target => "WME"}= m.id
+    .panel.panel-primary
+      .panel-heading= t('mps')
+      .panel-body
+        - area.mps.abertas.order("peso desc").each do |m|
+          %a.btn.btn-sm{ 'style' => "margin-top: 5px;", :class => "#{m.peso < 4 ? 'btn-success' : (m.peso < 8 ? 'btn-warning' : 'btn-danger')}", :href => "#{cookies[:wme_url].nil? ? 'https://www.waze.com/' : cookies[:wme_url]}#{cookies[:wme_language].nil? ? 'pt-BR/' : cookies[:wme_language]}editor/?zoom=5\&lat=#{m.latitude}\&lon=#{m.longitude}\&mapProblem=#{m.id}", 'data-toggle' => 'tooltip', 'data-placement' => 'top', 'title' => "#{tipo_mp(m.tipo)}", :target => "WME"}= m.id
   #pus.tab-pane.fade{ 'role' => 'tabpanel' }
     .row
       .col-sm-3.col-sm-offset-3.col-md-3.col-md-offset-9.col-lg-3.col-lg-offset-9
         %span.text-right.small= "#{t('updated-at')} #{@atu_pu.data.strftime('%d/%m/%Y %H:%M')}"
-    .row
-      - area.pus.editaveis.order("data_criacao").each do |p|
-        %a.btn.btn-sm{ 'style' => "margin-top: 5px;", :class => "#{(Time.now - p.data_criacao) < 172800 ? 'btn-success' : ((Time.now - p.data_criacao) < 1209600 ? 'btn-warning' : 'btn-danger')}", :href => "#{cookies[:wme_url].nil? ? 'https://www.waze.com/' : cookies[:wme_url]}#{cookies[:wme_language].nil? ? 'pt-BR/' : cookies[:wme_language]}editor/?zoom=5\&lat=#{p.latitude}\&lon=#{p.longitude}\&showpur=#{p.id}\&endshow", 'data-toggle' => 'tooltip', 'data-placement' => 'top', 'title' => "#{tipo_pu(p.tipo,p.subtipo)}", :target => "WME"}
-          - if p.categoria == 'RESIDENCE_HOME'
-            %i.fa.fa-home{'aria-hidden' => 'true'}
-          - if p.categoria == 'PARKING_LOT'
-            %i.fa.fa-car{'aria-hidden' => 'true'}
-          %i{'class' => "fa #{icone_pu(p.tipo,p.subtipo)}", 'aria-hidden' => 'true'}
-          = (p.nome_local.nil? or p.nome_local.strip.empty? ? "[#{t('noname')}]": p.nome_local)
+    .panel.panel-primary
+      .panel-heading= t('pus')
+      .panel-body
+        - area.pus.editaveis.order("data_criacao").each do |p|
+          %a.btn.btn-sm{ 'style' => "margin-top: 5px;", :class => "#{(Time.now - p.data_criacao) < 172800 ? 'btn-success' : ((Time.now - p.data_criacao) < 1209600 ? 'btn-warning' : 'btn-danger')}", :href => "#{cookies[:wme_url].nil? ? 'https://www.waze.com/' : cookies[:wme_url]}#{cookies[:wme_language].nil? ? 'pt-BR/' : cookies[:wme_language]}editor/?zoom=5\&lat=#{p.latitude}\&lon=#{p.longitude}\&showpur=#{p.id}\&endshow", 'data-toggle' => 'tooltip', 'data-placement' => 'top', 'title' => "#{tipo_pu(p.tipo,p.subtipo)}", :target => "WME"}
+            - if p.categoria == 'RESIDENCE_HOME'
+              %i.fa.fa-home{'aria-hidden' => 'true'}
+            - if p.categoria == 'PARKING_LOT'
+              %i.fa.fa-car{'aria-hidden' => 'true'}
+            %i{'class' => "fa #{icone_pu(p.tipo,p.subtipo)}", 'aria-hidden' => 'true'}
+            = (p.nome_local.nil? or p.nome_local.strip.empty? ? "[#{t('noname')}]": p.nome_local)
